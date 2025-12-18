@@ -1,0 +1,108 @@
+ // -------------------------------
+  // Express Web Server Setup
+  // -------------------------------
+  const app = express();
+  app.locals.activeUsers = new Map();
+
+// EJS with layout support
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'dashboard', 'views'));
+
+app.use(expressLayouts);
+app.set('layout', 'layout'); // dashboard/views/layout.ejs
+
+// Static files
+app.use(express.static(path.join(__dirname, 'dashboard', 'public')));
+
+// Body parser
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// Session setup
+const sessionStore = MongoStore.create({ mongoUrl: process.env.mongodbURL });
+app.set('sessionStore', sessionStore);
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'your-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }
+  })
+);
+
+// Passport setup
+passport.use(
+  new (require('passport-discord').Strategy)({
+    clientID: process.env.DISCORD_CLIENT_ID,
+    clientSecret: process.env.DISCORD_CLIENT_SECRET,
+    callbackURL: process.env.CALLBACK_URL,
+    scope: ['identify', 'guilds']
+  }, (accessToken, refreshToken, profile, done) => {
+    return done(null, profile);
+  })
+);
+
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Middleware to pass client to all routes
+app.use((req, res, next) => {
+  res.locals.client = client;
+  res.locals.user = req.session.user || null; // for templates
+  next();
+});
+
+// Verified badge availability middleware
+app.use(async (req, res, next) => {
+  try {
+    const uid = req.session?.user?.id;
+    if (!uid) {
+      res.locals.userVerified = false;
+      res.locals.dismissAb = false;
+      res.locals.dismissVpn = false;
+      res.locals.isAdmin = false;
+      return next();
+    }
+    if (uid === process.env.developerId) {
+      res.locals.userVerified = true;
+      // Owner default: respect session flags if set
+      res.locals.dismissAb = !!req.session?.dismissAdblock;
+      res.locals.dismissVpn = !!req.session?.dismissVpn;
+      res.locals.isAdmin = true;
+      return next();
+    }
+    const v = await VerifiedUser.findOne({ userId: uid }).lean().catch(() => null);
+    res.locals.userVerified = !!v;
+    try {
+      const u = await UserAccount.findOne({ userId: uid }).lean().catch(() => null);
+      res.locals.dismissAb = !!(u?.dismissAdblock || req.session?.dismissAdblock);
+      res.locals.dismissVpn = !!(u?.dismissVpn || req.session?.dismissVpn);
+      const a = await AdminUser.findOne({ userId: uid }).lean().catch(() => null);
+      res.locals.isAdmin = !!a;
+    } catch {
+      res.locals.dismissAb = !!req.session?.dismissAdblock;
+      res.locals.dismissVpn = !!req.session?.dismissVpn;
+      res.locals.isAdmin = false;
+    }
+    next();
+  } catch {
+    res.locals.userVerified = false;
+    res.locals.dismissAb = !!req.session?.dismissAdblock;
+    res.locals.dismissVpn = !!req.session?.dismissVpn;
+    res.locals.isAdmin = false;
+    next();
+  }
+});
+
+// Load your routes
+require('./dashboard/routes')(app, client, passport);
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Web dashboard running on port ${PORT}`);
+});

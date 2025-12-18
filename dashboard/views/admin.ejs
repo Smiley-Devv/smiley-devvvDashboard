@@ -1,0 +1,499 @@
+<% if (user.id !== process.env.developerId) { %>
+  <!-- Access Denied -->
+  <div class="min-h-screen flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8 bg-black space-y-4">
+    <h1 class="text-6xl font-bold text-red-600">Access Denied</h1>
+    <p class="text-white/70 text-lg">You do not have permission to access this page.</p>
+  </div>
+<% } else { %>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+
+  <!-- Owner Panel Heading -->
+  <div class="text-center space-y-3">
+    <p class="uppercase tracking-wide text-white/60 text-sm">Owner Panel</p>
+    <h1 class="text-5xl font-bold text-white">Administrative Console</h1>
+    <p class="text-white/60 text-base">Quickly review stats, manage blacklists, and control guild access.</p>
+  </div>
+
+  <!-- Stats & Quick Actions -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="feature-card bg-white/5 border border-white/10 rounded-2xl p-6">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-xl font-semibold text-white">Bot Statistics</h2>
+        <span class="text-sm text-white/60">Live</span>
+      </div>
+      <div class="grid grid-cols-2 gap-4 text-white">
+        <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+          <p class="text-xs uppercase text-white/60">Servers</p>
+          <p class="text-2xl font-bold"><%= stats.guilds %></p>
+        </div>
+        <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+          <p class="text-xs uppercase text-white/60">Users</p>
+          <p class="text-2xl font-bold"><%= stats.users %></p>
+        </div>
+        <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+          <p class="text-xs uppercase text-white/60">Commands</p>
+          <p class="text-2xl font-bold"><%= stats.commands %></p>
+        </div>
+        <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+          <p class="text-xs uppercase text-white/60">Uptime</p>
+          <p class="text-2xl font-bold"><%= Math.floor(stats.uptime / 1000 / 60 / 60) %>h</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-card bg-white/5 border border-white/10 rounded-2xl p-6 lg:col-span-2">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold text-white">Quick Actions</h2>
+        <span class="text-xs text-white/50">Use responsibly</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <button id="restartBot" class="inline-flex items-center justify-center gap-2 gradient-bg px-4 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity duration-300">
+          <i class="fas fa-redo"></i> Restart Bot
+        </button>
+        <button id="clearCache" class="inline-flex items-center justify-center gap-2 bg-gray-700 text-white px-4 py-3 rounded-xl font-semibold hover:bg-gray-600 transition-colors">
+          <i class="fas fa-broom"></i> Clear Cache
+        </button>
+        <div class="flex gap-2">
+          <button id="toggleMaintenance" class="flex-1 inline-flex items-center justify-center gap-2 bg-white/10 text-white px-4 py-3 rounded-xl font-semibold hover:bg-white/20 transition-colors">
+            <i class="fas fa-tools"></i> Maintenance: <span id="maintenanceState">Off</span>
+          </button>
+          <button id="reloadCommands" class="inline-flex items-center justify-center gap-2 bg-purple-600 text-white px-4 py-3 rounded-xl font-semibold hover:bg-purple-700 transition-colors">
+            <i class="fas fa-sync"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage Users & Blacklist -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- Manage Users Card -->
+    <div class="feature-card bg-white/5 border border-white/10 rounded-2xl p-6 lg:col-span-1">
+      <h2 class="text-xl font-bold text-white mb-4">Manage Users</h2>
+
+      <div class="space-y-4">
+        <!-- Blacklist User Form -->
+        <form action="/admin/blacklist/user" method="POST" class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-medium">Blacklist User</h3>
+            <span class="text-xs text-white/50">Hard block</span>
+          </div>
+          <input type="text" name="userId" placeholder="User ID" class="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20" required>
+          <input type="text" name="reason" placeholder="Reason" class="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20" required>
+          <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Blacklist</button>
+        </form>
+
+        <div class="border-t border-white/10 pt-4">
+          <form action="/admin/unblacklist/user" method="POST" class="space-y-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-white font-medium">Unblacklist User</h3>
+              <span class="text-xs text-white/50">Reinstate</span>
+            </div>
+            <input type="text" name="userId" placeholder="User ID" class="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20" required>
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Unblacklist</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- IP Blacklist Card -->
+    <div class="feature-card bg-white/5 border border-white/10 rounded-2xl p-6 lg:col-span-1">
+      <h2 class="text-xl font-bold text-white mb-4">Manage IP Blacklist</h2>
+      <div class="space-y-4">
+        <form action="/admin/blacklist/ip" method="POST" class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-medium">Blacklist IP</h3>
+            <span class="text-xs text-white/50">Hard block</span>
+          </div>
+          <input type="text" name="ip" placeholder="IP address" class="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20" required>
+          <input type="text" name="reason" placeholder="Reason" class="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20" required>
+          <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Blacklist</button>
+        </form>
+        <div class="border-t border-white/10 pt-4">
+          <form action="/admin/unblacklist/ip" method="POST" class="space-y-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-white font-medium">Unblacklist IP</h3>
+              <span class="text-xs text-white/50">Reinstate</span>
+            </div>
+            <input type="text" name="ip" placeholder="IP address" class="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20" required>
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Unblacklist</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verified Users Card -->
+    <div class="feature-card bg-white/5 border border-white/10 rounded-2xl p-6 lg:col-span-1">
+      <h2 class="text-xl font-bold text-white mb-4">Verified Users</h2>
+      <div class="space-y-4">
+        <form action="/admin/verify/user" method="POST" class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-medium">Grant Verified Badge</h3>
+            <span class="text-xs text-white/50">Blue check</span>
+          </div>
+          <input type="text" name="userId" placeholder="User ID" class="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20" required>
+          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Verify</button>
+        </form>
+        <div class="border-t border-white/10 pt-4">
+          <form action="/admin/unverify/user" method="POST" class="space-y-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-white font-medium">Revoke Verified Badge</h3>
+              <span class="text-xs text-white/50">Remove</span>
+            </div>
+            <input type="text" name="userId" placeholder="User ID" class="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20" required>
+            <button type="submit" class="w-full bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">Unverify</button>
+          </form>
+        </div>
+      </div>
+      <div class="mt-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-white font-medium">Current Verified</h3>
+          <span class="text-xs text-white/60"><%= verifiedUsers?.length || 0 %> users</span>
+        </div>
+        <div class="max-h-56 overflow-y-auto rounded-xl border border-white/10">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="text-white/70">
+                <th class="px-4 py-2">User ID</th>
+                <th class="px-4 py-2">Granted By</th>
+                <th class="px-4 py-2">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (verifiedUsers && verifiedUsers.length > 0) { %>
+                <% verifiedUsers.forEach(v => { %>
+                  <tr class="border-t border-white/20">
+                    <td class="px-4 py-2 text-white"><%= v.userId %></td>
+                    <td class="px-4 py-2 text-white/70"><%= v.grantedBy || 'owner' %></td>
+                    <td class="px-4 py-2 text-white/70"><%= new Date(v.grantedAt).toLocaleString() %></td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="3" class="px-4 py-2 text-center text-white/70">No verified users.</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Admin Users Card -->
+    <div class="feature-card bg-white/5 border border-white/10 rounded-2xl p-6 lg:col-span-1">
+      <h2 class="text-xl font-bold text-white mb-4">Admin Users</h2>
+      <div class="space-y-4">
+        <form action="/admin/grant" method="POST" class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-white font-medium">Grant Admin</h3>
+            <span class="text-xs text-white/50">Panel access</span>
+          </div>
+          <input type="text" name="userId" placeholder="User ID" class="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20" required>
+          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Grant</button>
+        </form>
+        <div class="border-t border-white/10 pt-4">
+          <form action="/admin/revoke" method="POST" class="space-y-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-white font-medium">Revoke Admin</h3>
+              <span class="text-xs text-white/50">Remove access</span>
+            </div>
+            <input type="text" name="userId" placeholder="User ID" class="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20" required>
+            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Revoke</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blacklisted Users Table -->
+    <div class="feature-card bg-white/5 border border-white/10 rounded-2xl p-6 overflow-x-auto lg:col-span-2">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-white">Blacklisted Users</h2>
+        <span class="text-xs text-white/60"><%= blacklistedUsers?.length || 0 %> entries</span>
+      </div>
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="text-white/70">
+            <th class="px-4 py-2">User ID</th>
+            <th class="px-4 py-2">Reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (blacklistedUsers && blacklistedUsers.length > 0) { %>
+            <% blacklistedUsers.forEach(user => { %>
+              <tr class="border-t border-white/20">
+                <td class="px-4 py-2 text-white"><%= user.userId %></td>
+                <td class="px-4 py-2 text-white/70"><%= user.reason %></td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="2" class="px-4 py-2 text-center text-white/70">No blacklisted users.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Blacklisted IPs Table -->
+  <div class="feature-card bg-white/5 border border-white/10 rounded-2xl p-6 overflow-x-auto">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-bold text-white">Blacklisted IPs</h2>
+      <span class="text-xs text-white/60"><%= blacklistedIps?.length || 0 %> entries</span>
+    </div>
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="text-white/70">
+          <th class="px-4 py-2">IP</th>
+          <th class="px-4 py-2">Reason</th>
+          <th class="px-4 py-2">Added By</th>
+          <th class="px-4 py-2">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (blacklistedIps && blacklistedIps.length > 0) { %>
+          <% blacklistedIps.forEach(entry => { %>
+            <tr class="border-t border-white/20">
+              <td class="px-4 py-2 text-white"><%= entry.ip %></td>
+              <td class="px-4 py-2 text-white/70"><%= entry.reason %></td>
+              <td class="px-4 py-2 text-white/70"><%= entry.addedBy || 'owner' %></td>
+              <td class="px-4 py-2 text-white/70"><%= new Date(entry.blacklistedAt).toLocaleString() %></td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="4" class="px-4 py-2 text-center text-white/70">No blacklisted IPs.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Admin Users Table -->
+  <div class="feature-card bg-white/5 border border-white/10 rounded-2xl p-6 overflow-x-auto">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-bold text-white">Admin Users</h2>
+      <span class="text-xs text-white/60"><%= adminUsers?.length || 0 %> entries</span>
+    </div>
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="text-white/70">
+          <th class="px-4 py-2">User ID</th>
+          <th class="px-4 py-2">Added By</th>
+          <th class="px-4 py-2">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (adminUsers && adminUsers.length > 0) { %>
+          <% adminUsers.forEach(entry => { %>
+            <tr class="border-t border-white/20">
+              <td class="px-4 py-2 text-white"><%= entry.userId %></td>
+              <td class="px-4 py-2 text-white/70"><%= entry.addedBy || 'owner' %></td>
+              <td class="px-4 py-2 text-white/70"><%= new Date(entry.createdAt).toLocaleString() %></td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="3" class="px-4 py-2 text-center text-white/70">No admin users.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Guild Management -->
+  <div class="feature-card bg-white/5 border border-white/10 rounded-2xl p-6 overflow-x-auto">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-2xl font-bold text-white">Guilds</h2>
+        <p class="text-white/60 text-sm">Search and toggle blacklist status.</p>
+      </div>
+      <input type="text" id="guildSearch" placeholder="Search guilds..." class="w-64 p-2 rounded-lg bg-white/10 text-white border border-white/20">
+    </div>
+
+    <table id="guildTable" class="w-full text-left border-collapse">
+      <thead>
+        <tr class="text-white/70">
+          <th class="px-4 py-2">Guild Name</th>
+          <th class="px-4 py-2">Guild ID</th>
+          <th class="px-4 py-2">Blacklist Status</th>
+          <th class="px-4 py-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (guilds && guilds.length > 0) { %>
+          <% guilds.forEach(guild => { 
+            const blacklisted = blacklistedGuilds.some(bg => bg.guildId === guild.id);
+            const reason = blacklisted ? blacklistedGuilds.find(bg => bg.guildId === guild.id).reason : '';
+          %>
+            <tr class="border-t border-white/20">
+              <td class="px-4 py-2 text-white"><%= guild.name %></td>
+              <td class="px-4 py-2 text-white/70"><%= guild.id %></td>
+              <td class="px-4 py-2 text-white/70">
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs <%= blacklisted ? 'bg-red-500/20 text-red-300' : 'bg-green-500/20 text-green-300' %>">
+                  <%= blacklisted ? 'Blacklisted' : 'Active' %>
+                </span>
+                <% if (blacklisted) { %>
+                  <span class="text-white/50 text-xs ml-2">(<%= reason %>)</span>
+                <% } %>
+              </td>
+              <td class="px-4 py-2">
+                <% if (!blacklisted) { %>
+                  <form action="/admin/blacklist/guild/<%= guild.id %>" method="POST" class="flex gap-2 flex-col md:flex-row">
+                    <input type="text" name="reason" placeholder="Reason" required class="p-2 rounded-lg bg-white/10 text-white border border-white/20 flex-1">
+                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-sm font-medium">Blacklist</button>
+                  </form>
+                <% } else { %>
+                  <form action="/admin/unblacklist/guild/<%= guild.id %>" method="POST">
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm font-medium">Unblacklist</button>
+                  </form>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="4" class="px-4 py-2 text-center text-white/70">No guilds available.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Active Site Users -->
+  <div class="feature-card bg-white/5 border border-white/10 rounded-2xl p-6 overflow-x-auto">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-white">Active Site Users</h2>
+      <span class="text-xs text-white/60"><%= activeUsers?.length || 0 %> online</span>
+    </div>
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="text-white/70">
+          <th class="px-4 py-2">User</th>
+          <th class="px-4 py-2">User ID</th>
+          <th class="px-4 py-2">Last Seen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (activeUsers && activeUsers.length > 0) { %>
+          <% activeUsers.forEach(u => { %>
+            <tr class="border-t border-white/20">
+              <td class="px-4 py-2 text-white"><%= u.username || 'Unknown' %></td>
+              <td class="px-4 py-2 text-white/70"><%= u.id %></td>
+              <td class="px-4 py-2 text-white/70"><%= (u.lastSeenAt || u.loggedInAt) ? new Date(u.lastSeenAt || u.loggedInAt).toLocaleString() : '' %></td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="3" class="px-4 py-2 text-center text-white/70">No active users.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Guild Search Script -->
+<script>
+  document.getElementById('guildSearch').addEventListener('keyup', function() {
+    const filter = this.value.toLowerCase();
+    document.querySelectorAll('#guildTable tbody tr').forEach(row => {
+      const name = row.cells[0].textContent.toLowerCase();
+      const id = row.cells[1].textContent.toLowerCase();
+      row.style.display = (name.includes(filter) || id.includes(filter)) ? '' : 'none';
+    });
+  });
+
+  async function postAdminAction(url, body = {}) {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.error) throw new Error(data.error || data.message || `Failed (${res.status})`);
+      return data;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async function getMaintenance() {
+    try {
+      const res = await fetch('/api/admin/maintenance', { credentials: 'include' });
+      const data = await res.json();
+      updateMaintenanceButton(data.enabled);
+    } catch (err) {
+      console.error('Maintenance status error:', err);
+    }
+  }
+
+  function updateMaintenanceButton(enabled) {
+    const state = document.getElementById('maintenanceState');
+    if (state) state.textContent = enabled ? 'On' : 'Off';
+  }
+
+  const restartBtn = document.getElementById('restartBot');
+  const cacheBtn = document.getElementById('clearCache');
+  const maintBtn = document.getElementById('toggleMaintenance');
+  const reloadCmdsBtn = document.getElementById('reloadCommands');
+
+  restartBtn?.addEventListener('click', async () => {
+    restartBtn.disabled = true;
+    try {
+      await postAdminAction('/admin/restart');
+      alert('Restarting bot...');
+    } catch (err) {
+      alert(err.message || 'Failed to restart.');
+    } finally {
+      restartBtn.disabled = false;
+    }
+  });
+
+  cacheBtn?.addEventListener('click', async () => {
+    cacheBtn.disabled = true;
+    try {
+      const data = await postAdminAction('/admin/cache/clear');
+      alert(data.message || 'Cache cleared.');
+    } catch (err) {
+      alert(err.message || 'Failed to clear cache.');
+    } finally {
+      cacheBtn.disabled = false;
+    }
+  });
+
+  maintBtn?.addEventListener('click', async () => {
+    maintBtn.disabled = true;
+    const isOn = document.getElementById('maintenanceState')?.textContent === 'On';
+    try {
+      const data = await postAdminAction('/admin/maintenance', { enabled: !isOn });
+      updateMaintenanceButton(data.enabled);
+      alert(`Maintenance ${data.enabled ? 'enabled' : 'disabled'}.`);
+    } catch (err) {
+      alert(err.message || 'Failed to toggle maintenance.');
+    } finally {
+      maintBtn.disabled = false;
+    }
+  });
+
+  reloadCmdsBtn?.addEventListener('click', async () => {
+    reloadCmdsBtn.disabled = true;
+    try {
+      const data = await postAdminAction('/admin/commands/reload');
+      alert(data.message || 'Commands reloaded.');
+    } catch (err) {
+      alert(err.message || 'Failed to reload commands.');
+    } finally {
+      reloadCmdsBtn.disabled = false;
+    }
+  });
+
+  getMaintenance();
+</script>
+
+<% } %>

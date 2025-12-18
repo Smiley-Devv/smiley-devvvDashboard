@@ -1,0 +1,35 @@
+<div class="min-h-screen page-shell text-white">
+  <div class="max-w-3xl mx-auto px-6 py-24">
+    <div class="glass-panel p-8">
+      <div class="flex items-center justify-between mb-4">
+        <h1 class="text-3xl font-bold">Ad Blocker Detected</h1>
+        <span class="text-white/60 text-sm">We noticed it</span>
+      </div>
+      <p class="text-white/70 mb-6">
+        You step into a quiet hall. No popups. No flashing banners. Just a small crew keeping the lights on.
+        The site runs on tiny sponsorships and simple unobtrusive placements. Nothing loud. Nothing creepy.
+      </p>
+      <p class="text-white/70 mb-6">
+        The blocker you’re using (uBlock Origin, AdGuard, Adblock Plus, Brave Shield, or one of the usual suspects)
+        is great for the chaotic web. Here, it just hides the small signs that keep this project afloat.
+      </p>
+      <p class="text-white/70 mb-6">
+        If you can, please turn it off for this site and refresh. We won’t beg. If you’d rather keep it on,
+        that’s okay too — but some parts may not show up as intended.
+      </p>
+      <div class="mt-8 flex gap-3">
+        <a href="/" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Go Home</a>
+        <a href="/ack/adblock" id="abDismiss" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg">Don’t show again</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    try {
+      localStorage.setItem('abDismiss', '1');
+      document.cookie = "ab_dismiss=1; path=/; max-age=31536000; SameSite=Lax";
+    } catch {}
+  })();
+</script>

@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title || client.user.username %></title>
+    <link rel="icon" type="image/x-icon" href="/logo.png" />
+    <meta content="#dc2626" data-react-helmet="true" name="theme-color" />
+    <meta name="title" content="<%= client.user.username %> - Take Your Server to the Next Level" />
+    <meta name="description" content="<%= client.user.username %> is a versatile Discord bot with features like giveaways, leveling, Minecraft server status tracking, games, button roles, and more." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="#" />
+    <meta property="og:title" content="<%= client.user.username %> - Take Your Server to the Next Level" />
+    <meta property="og:description" content="<%= client.user.username %> is a versatile Discord bot with features like giveaways, leveling, Minecraft server status tracking, games, button roles, and more." />
+    <meta property="og:image" content="/logo.png" />
+    <meta property="og:color" content="#5b21b6" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="#" />
+    <meta property="twitter:title" content="<%= client.user.username %> - Take Your Server to the Next Level" />
+    <meta property="twitter:description" content="<%= client.user.username %> is a versatile Discord bot with features like giveaways, leveling, Minecraft server status tracking, games, button roles, and more." />
+    <meta property="twitter:image" content="/logo.png" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- GSAP (optional for animations) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/script.js"></script>
+  </head>
+  <body class="bg-black text-white overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-purple-500" data-dismiss-ab="<%= dismissAb ? '1' : '0' %>">
+    
+    <!-- Loader -->
+    <div id="loader" class="fixed inset-0 bg-black z-50 flex items-center justify-center">
+      <div class="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 top-0">
+      <div class="nav-blur bg-black/30 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between h-20">
+
+            <!-- Logo + Bot Name (Wrapped in link to homepage) -->
+            <div class="flex items-center gap-2">
+              <a href="/" class="flex items-center">
+                <img src="logo.png" alt="Logo" class="w-10 h-10 rounded-lg" />
+              </a>
+              <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-purple-700">
+                <%= client.user.username %>
+              </span>
+            </div>
+
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center gap-8">
+              <a href="/" class="text-white/70 hover:text-white transition-colors">Home</a>
+              <a href="#features" class="text-white/70 hover:text-white transition-colors">Features</a>
+              <a href="/tos" class="text-white/70 hover:text-white transition-colors">Terms of Service</a>
+              <a href="/privacy" class="text-white/70 hover:text-white transition-colors">Privacy Policy</a>
+            </div>
+
+            <!-- Desktop User Buttons -->
+            <div class="hidden md:flex items-center gap-4">
+              <% if (user) { %>
+                <a href="/profile" class="relative w-10 h-10" title="Profile">
+                  <img
+                    src="<%= user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=64` : '/logo.png' %>"
+                    alt="Profile"
+                    class="w-10 h-10 rounded-full object-cover"
+                  />
+                  <span id="presenceDot" class="absolute bottom-0 right-0 w-3 h-3 rounded-full ring-2 ring-black" style="background-color:#6b7280"></span>
+                  <% if (userVerified) { %>
+                    <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-blue-600 flex items-center justify-center text-[10px] text-white">
+                      <i class="fas fa-check"></i>
+                    </span>
+                  <% } %>
+                </a>
+                <% if (user.id === process.env.developerId || isAdmin) { %>
+                  <a href="/admin" class="px-4 py-2 text-white/70 hover:text-white transition-colors">Owner Panel</a>
+                <% } %>
+                <a href="/logout" class="flex items-center px-4 py-2 bg-red-600 rounded hover:bg-red-700 transition gap-2">
+                  <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+              <% } else { %>
+                <a href="/login" class="flex items-center px-4 py-2 bg-green-600 rounded hover:bg-green-700 transition gap-2">
+                  <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+              <% } %>
+            </div>
+
+            <!-- Mobile menu toggle -->
+            <div class="md:hidden">
+              <button onclick="toggleMobileMenu()" class="text-white p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path class="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Mobile Menu -->
+          <div id="mobileMenu" class="hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 bg-black/50 rounded-lg mt-2">
+              <a href="/" class="block px-3 py-2 text-white/70 hover:text-white transition-colors">Home</a>
+              <a href="#features" class="block px-3 py-2 text-white/70 hover:text-white transition-colors">Features</a>
+              <a href="/tos" class="block px-3 py-2 text-white/70 hover:text-white transition-colors">Terms of Service</a>
+              <a href="/privacy" class="block px-3 py-2 text-white/70 hover:text-white transition-colors">Privacy Policy</a>
+
+              <div class="border-t border-white/20 mt-2 pt-2 flex flex-col space-y-2">
+                <% if (user) { %>
+                  <a href="/profile" class="px-3 py-2 hover:text-white"><i class="fas fa-user-circle"></i> Dashboard</a>
+                  <% if (user.id === process.env.developerId || isAdmin) { %>
+                    <a href="/admin" class="block px-3 py-2 text-white/70 hover:text-white transition-colors">Owner Panel</a>
+                  <% } %>
+                  <a href="/logout" class="px-3 py-2 hover:text-white"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <% } else { %>
+                  <a href="/login" class="px-3 py-2 hover:text-white"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <% } %>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <%- body %>
+
+    <!-- Footer -->
+    <footer class="text-white py-16 border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <!-- Logo & Description -->
+          <div>
+            <img class="h-10 mb-6" src="logo.png" alt="ShadowCore Logo" />
+            <p class="text-lg text-white/70">
+              <%= client.user.username %> is the ultimate tool for transforming your Discord server management with powerful features like leveling, moderation, giveaways, and more!
+            </p>
+          </div>
+          <!-- Quick Links -->
+          <div>
+            <h4 class="text-xl font-semibold mb-4">Quick Links</h4>
+            <ul class="space-y-4">
+              <li><a href="#hero" class="text-white/70 hover:text-white">Home</a></li>
+              <li><a href="#features" class="text-white/70 hover:text-white">Features</a></li>
+              <li><a href="/tos" class="text-white/70 hover:text-white">Terms of Service</a></li>
+              <li><a href="/privacy" class="text-white/70 hover:text-white">Privacy Policy</a></li>
+            </ul>
+          </div>
+          <!-- Follow Us -->
+          <div>
+            <h4 class="text-xl font-semibold mb-4">Follow Us</h4>
+            <ul class="space-y-4">
+              <li><a href="#" class="text-white/70 hover:text-white">Invite</a></li>
+              <li><a href="#" class="text-white/70 hover:text-white">Discord</a></li>
+              <li><a href="#" class="text-white/70 hover:text-white">GitHub</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-12 border-t border-white/20 pt-6 text-center">
+          <p class="text-sm text-white/50">
+            © 2025 <%= client.user.username %>. All rights reserved. • Not affiliated with Discord Inc.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        menu.classList.toggle('hidden');
+      }
+      (function() {
+        const dot = document.getElementById('presenceDot');
+        if (!dot) return;
+        fetch('/api/users/me/presence', { credentials: 'include' })
+          .then(r => {
+            if (!r.ok) throw new Error('presence fetch failed');
+            return r.json();
+          })
+          .then(({ status }) => {
+            const colors = {
+              online: '#22c55e',
+              dnd: '#ef4444',
+              idle: '#f59e0b',
+              invisible: '#6b7280',
+              offline: '#6b7280'
+            };
+            dot.style.backgroundColor = colors[status] || '#6b7280';
+          })
+          .catch(() => {
+            dot.style.backgroundColor = '#6b7280';
+          });
+      })();
+      document.addEventListener('DOMContentLoaded', function() {
+        try {
+          if (location.pathname === '/adblocker' || location.pathname === '/vpn') return;
+          const cookieHasDismiss = (typeof document !== 'undefined') && document.cookie && document.cookie.includes('ab_dismiss=1');
+          const lsDismiss = (typeof localStorage !== 'undefined') && localStorage.getItem && (localStorage.getItem('abDismiss') === '1');
+          const serverDismiss = document.body.getAttribute('data-dismiss-ab') === '1';
+          if (cookieHasDismiss || lsDismiss || serverDismiss) return;
+          setTimeout(() => {
+            try {
+              if (!document || !document.body) return;
+              const bait = document.createElement('div');
+              bait.className = 'ads ad-banner advertisement adunit adsbox ad-container ad-placement sponsor-banner adsbygoogle';
+              bait.style.position = 'absolute';
+              bait.style.left = '-9999px';
+              bait.style.height = '100px';
+              bait.style.width = '100px';
+              document.body.appendChild(bait);
+              const cs = getComputedStyle(bait);
+              const hidden = cs.display === 'none' || cs.visibility === 'hidden' || bait.offsetHeight === 0 || bait.clientHeight === 0 || bait.offsetParent === null;
+              document.body.removeChild(bait);
+              if (hidden) {
+                location.href = '/adblocker';
+              }
+            } catch {}
+          }, 300);
+        } catch {}
+      });
+    </script>
+
+  </body>
+</html>

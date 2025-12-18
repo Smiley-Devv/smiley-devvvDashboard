@@ -1,0 +1,132 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+
+  <!-- Page Heading -->
+  <div class="text-center space-y-4">
+    <h1 class="text-5xl font-bold text-white">Premium Plans</h1>
+    <p class="text-xl text-white/70">Unlock exclusive features for <%= client.user.username %> with our premium plans!</p>
+  </div>
+
+  <!-- Premium Plan Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <% plans.forEach(plan => { %>
+      <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d]">
+        <div class="absolute flex flex-col justify-between text-white z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-6">
+          <div class="text-center space-y-2 mb-6">
+            <h3 class="text-2xl font-bold text-white"><%= plan.name %></h3>
+            <h4 class="text-xl font-semibold text-red-500">$<%= plan.price %>/month</h4>
+          </div>
+          <ul class="space-y-2 mb-6 text-white/70">
+            <% plan.features.forEach(feature => { %>
+              <li class="flex items-center">
+                <span class="text-green-500 mr-2">✔</span> <span><%= feature %></span>
+              </li>
+            <% }) %>
+          </ul>
+          <div class="text-center space-y-2">
+            <form class="subscribeForm" action="/premium/subscribe" method="POST">
+              <input type="hidden" name="plan" value="<%= plan.name %>">
+              <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors w-full">
+                Subscribe as User
+              </button>
+            </form>
+            <% if (managedGuilds && managedGuilds.length > 0) { %>
+              <form class="guildSubscribeForm" data-plan="<%= plan.name %>">
+                <div class="space-y-2">
+                  <select class="w-full bg-white/10 text-white px-4 py-2 rounded-lg">
+                    <% managedGuilds.forEach(g => { %>
+                      <option value="<%= g.id %>"><%= g.name %></option>
+                    <% }) %>
+                  </select>
+                  <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors w-full">
+                    Subscribe Server
+                  </button>
+                </div>
+              </form>
+            <% } %>
+          </div>
+        </div>
+        <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+      </div>
+    <% }) %>
+  </div>
+
+  <!-- Premium Benefits -->
+  <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+    <h2 class="text-2xl font-bold text-white mb-6 text-center">Premium Benefits</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white/70">
+      <div>
+        <h3 class="font-semibold text-white mb-2">User Premium</h3>
+        <ul class="list-disc list-inside space-y-1">
+          <li>Access to premium commands</li>
+          <li>Higher priority in queues</li>
+          <li>Custom profile features</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold text-white mb-2">Server Premium</h3>
+        <ul class="list-disc list-inside space-y-1">
+          <li>Unlimited music playlists</li>
+          <li>Advanced moderation tools</li>
+          <li>Custom bot responses</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Success Toast -->
+<div id="toast" class="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg opacity-0 transition-opacity">
+  ✅ Subscription successful!
+</div>
+
+<!-- JavaScript to handle subscribe buttons -->
+<script>
+  document.querySelectorAll('.subscribeForm').forEach(form => {
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const action = form.action;
+
+      const res = await fetch(action, {
+        method: 'POST',
+        body: formData
+      });
+
+      const toast = document.getElementById('toast');
+
+      if (res.ok) {
+        toast.textContent = "✅ Subscription successful!";
+        toast.classList.remove('opacity-0');
+        setTimeout(() => toast.classList.add('opacity-0'), 3000);
+      } else {
+        toast.textContent = "❌ Something went wrong!";
+        toast.classList.remove('opacity-0');
+        setTimeout(() => toast.classList.add('opacity-0'), 3000);
+      }
+    });
+  });
+
+  document.querySelectorAll('.guildSubscribeForm').forEach(form => {
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const plan = form.dataset.plan;
+      const select = form.querySelector('select');
+      const guildId = select.value;
+      const res = await fetch(`/guild/${guildId}/premium/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ plan })
+      });
+      const toast = document.getElementById('toast');
+      if (res.ok) {
+        toast.textContent = "✅ Server subscription successful!";
+        toast.classList.remove('opacity-0');
+        setTimeout(() => toast.classList.add('opacity-0'), 3000);
+      } else {
+        toast.textContent = "❌ Something went wrong!";
+        toast.classList.remove('opacity-0');
+        setTimeout(() => toast.classList.add('opacity-0'), 3000);
+      }
+    });
+  });
+</script>

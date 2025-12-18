@@ -1,0 +1,25 @@
+<div class="max-w-3xl mx-auto px-4 py-16 text-center space-y-8">
+
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-8">
+      <h1 class="text-5xl font-bold text-white mb-4">🎉 Payment Successful! 🎉</h1>
+      <p class="text-xl text-white/70 mb-6">
+        Thank you <strong><%= user.username %></strong> for subscribing to <strong><%= plan %></strong>!
+        <% if (guildId) { %>
+          Your server (<%= guildId %>) now has premium access.
+        <% } %>
+      </p>
+  
+      <ul class="text-left text-white/70 mb-6 list-disc list-inside space-y-2">
+        <li>✅ Access to premium commands</li>
+        <li>✅ Higher priority in queues</li>
+        <li>✅ Special server perks</li>
+        <li>✅ Exclusive bot features</li>
+      </ul>
+  
+      <a href="/premium" class="inline-block bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors">
+        Return to Premium Page
+      </a>
+    </div>
+  
+  </div>
+  

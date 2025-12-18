@@ -1,0 +1,2727 @@
+<div class="flex h-screen text-gray-100 page-shell">
+  <!-- Sidebar -->
+  <div class="w-64 glass-panel p-4 flex flex-col">
+    <div class="p-4 border-b border-gray-700">
+      <h1 class="text-xl font-bold"><%= guild.name %></h1>
+      <p class="text-sm text-gray-400">Server Settings</p>
+    </div>
+
+    <nav class="flex-1 mt-4 space-y-1">
+      <a href="#overview" class="sidebar-tab flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors" data-tab="overview">
+        <i class="fas fa-home mr-3 w-5 text-center"></i>
+        <span>Overview</span>
+      </a>
+
+      <a href="#moderation" class="sidebar-tab flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors" data-tab="moderation">
+        <i class="fas fa-gavel mr-3 w-5 text-center"></i>
+        <span>Moderation</span>
+      </a>
+
+      <a href="#automod" class="sidebar-tab flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors" data-tab="automod">
+        <i class="fas fa-robot mr-3 w-5 text-center"></i>
+        <span>Auto-Moderation</span>
+      </a>
+
+      <a href="#welcome" class="sidebar-tab flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors" data-tab="welcome">
+        <i class="fas fa-door-open mr-3 w-5 text-center"></i>
+        <span>Welcome</span>
+      </a>
+
+      <a href="#logging" class="sidebar-tab flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors" data-tab="logging">
+        <i class="fas fa-scroll mr-3 w-5 text-center"></i>
+        <span>Logging</span>
+      </a>
+
+      <a href="#tickets" class="sidebar-tab flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors" data-tab="tickets">
+        <i class="fas fa-ticket-alt mr-3 w-5 text-center"></i>
+        <span>Tickets</span>
+      </a>
+
+      <a href="#notifications" class="sidebar-tab flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors" data-tab="notifications">
+        <i class="fas fa-bell mr-3 w-5 text-center"></i>
+        <span>Notifications</span>
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-gray-700">
+      <a href="/dashboard" class="flex items-center text-gray-400 hover:text-white">
+        <i class="fas fa-arrow-left mr-2"></i>
+        <span>Back to Servers</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-1 overflow-y-auto p-8 space-y-8 glass-panel mt-6 md:mt-0">
+    <!-- Overview Tab (Default) -->
+    <div id="overview-tab" class="tab-content space-y-8">
+      <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold">Server Overview</h1>
+        <div class="flex items-center space-x-2">
+          <span class="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm font-medium">
+            <i class="fas fa-circle text-xs mr-1"></i> Online
+          </span>
+        </div>
+      </div>
+
+      <!-- Header Card -->
+      <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d]">
+        <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-4 text-white flex items-center gap-4">
+          <img src="<%= guild.iconURL({ size: 128, dynamic: true }) %>" alt="Server Icon" class="w-14 h-14 rounded-full">
+          <div>
+            <h2 class="text-2xl font-bold"><%= guild.name %></h2>
+            <p class="text-white/70 text-sm">Summary of server activities.</p>
+          </div>
+        </div>
+        <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d] p-3">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#232225] p-3 text-white overflow-auto">
+            <p class="text-white/70 text-sm mb-1">Total Members</p>
+            <p class="text-2xl font-bold"><%= guild.memberCount.toLocaleString() %></p>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d] p-3">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#232225] p-3 text-white overflow-auto">
+            <p class="text-white/70 text-sm mb-1">Total Channels</p>
+            <p class="text-2xl font-bold"><%= (guild.channels?.cache?.size || 0) %></p>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d] p-3">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#232225] p-3 text-white overflow-auto">
+            <p class="text-white/70 text-sm mb-1">Total Roles</p>
+            <p class="text-2xl font-bold"><%= (guild.roles?.cache?.size || 0) %></p>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+      </div>
+
+      <!-- Latest Auto Moderation Logs -->
+      <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d]">
+        <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-4 text-white">
+          <h3 class="text-xl font-semibold mb-4">Latest Auto Moderation Logs</h3>
+          <div class="text-white/60">No activity data available.</div>
+        </div>
+        <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+      </div>
+
+      <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d]">
+        <div class="absolute flex flex-col gap-4 text-white z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-bold">Server Premium</h2>
+            <span class="<%= premium ? 'text-green-400' : 'text-red-400' %> font-medium"><%= premium ? 'Active' : 'Inactive' %></span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="md:col-span-1">
+              <label class="block text-sm text-gray-300 mb-1">Plan</label>
+              <select id="guildPremiumPlan" class="w-full bg-white/10 text-white px-4 py-2 rounded-lg">
+                <option value="Basic">Basic</option>
+                <option value="Pro">Pro</option>
+                <option value="Ultimate">Ultimate</option>
+              </select>
+            </div>
+            <div class="md:col-span-2 flex items-end gap-3">
+              <button id="activateGuildPremium" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors">
+                Activate
+              </button>
+              <button id="deactivateGuildPremium" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors">
+                Deactivate
+              </button>
+            </div>
+          </div>
+          <div class="text-sm text-white/70">
+            <% if (premium && premium.premium && premium.premium.expiresAt) { %>
+              Expires <%= new Date(premium.premium.expiresAt).toLocaleDateString() %>
+            <% } else { %>
+              No expiry
+            <% } %>
+          </div>
+        </div>
+        <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+      </div>
+    </div>
+
+    <!-- Moderation Tab -->
+    <div id="moderation-tab" class="tab-content hidden space-y-8">
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Moderation</h1>
+        <div class="flex items-center space-x-4">
+          <button id="refreshModLogs" class="text-gray-400 hover:text-white transition-colors" title="Refresh">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Moderation Actions -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Kick Member -->
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d] p-3">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-3 text-white overflow-auto">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-base font-semibold flex items-center">
+              <i class="fas fa-user-minus text-red-400 mr-2"></i>
+              Kick Member
+            </h3>
+            <button id="kickConfigToggle" class="px-2 py-1 bg-white/10 rounded-lg hover:bg-white/20" title="Settings">
+              <i class="fas fa-cog"></i>
+            </button>
+          </div>
+          <div id="kickConfig" class="hidden bg-gray-800/50 rounded-lg p-3 border border-gray-700 mb-3">
+            <div class="grid grid-cols-1 gap-3">
+              <label class="flex items-center">
+                <input type="checkbox" id="kickDmUser" class="rounded bg-gray-700 border-gray-600 text-blue-500 focus:ring-blue-500">
+                <span class="ml-2 text-sm">DM user about kick</span>
+              </label>
+              <div>
+                <label class="block text-sm mb-1">Default reason</label>
+                <input type="text" id="kickDefaultReason" class="w-full bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-white" placeholder="Violation of server rules">
+              </div>
+              <button id="kickConfigSave" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm">Save</button>
+            </div>
+          </div>
+          <form id="kickForm" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Member</label>
+              <select name="userId" class="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <option value="" disabled selected>Select a member</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Reason</label>
+              <input type="text" name="reason" placeholder="Violation of server rules" class="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
+            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+              Kick Member
+            </button>
+          </form>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+
+        <!-- Ban Member -->
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d] p-3">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-3 text-white overflow-auto">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-base font-semibold flex items-center">
+              <i class="fas fa-hammer text-red-500 mr-2"></i>
+              Ban Member
+            </h3>
+            <button id="banConfigToggle" class="px-2 py-1 bg-white/10 rounded-lg hover:bg-white/20" title="Settings">
+              <i class="fas fa-cog"></i>
+            </button>
+          </div>
+          <div id="banConfig" class="hidden bg-gray-800/50 rounded-lg p-3 border border-gray-700 mb-3">
+            <div class="grid grid-cols-1 gap-3">
+              <label class="flex items-center">
+                <input type="checkbox" id="banDmUser" class="rounded bg-gray-700 border-gray-600 text-blue-500 focus:ring-blue-500">
+                <span class="ml-2 text-sm">DM user about ban</span>
+              </label>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-sm mb-1">Default reason</label>
+                  <input type="text" id="banDefaultReason" class="w-full bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-white" placeholder="Severe violation of server rules">
+                </div>
+                <div>
+                  <label class="block text-sm mb-1">Delete days (0-7)</label>
+                  <input type="number" id="banDeleteDaysDefault" min="0" max="7" value="0" class="w-full bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-white">
+                </div>
+              </div>
+              <button id="banConfigSave" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm">Save</button>
+            </div>
+          </div>
+          <form id="banForm" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Member</label>
+              <select name="userId" class="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <option value="" disabled selected>Select a member</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Reason</label>
+              <input type="text" name="reason" placeholder="Severe violation of server rules" class="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <input type="number" name="days" min="0" max="7" value="0" class="w-16 bg-gray-700/50 border border-gray-600 rounded-lg px-2 py-1 text-white text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-gray-400">Days of messages to delete</span>
+              </div>
+              <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                Ban
+              </button>
+            </div>
+          </form>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+
+        <!-- Warn Member -->
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d] p-3">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-3 text-white overflow-auto">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-base font-semibold flex items-center">
+              <i class="fas fa-exclamation-triangle text-yellow-400 mr-2"></i>
+              Warn Member
+            </h3>
+            <button id="warnConfigToggle" class="px-2 py-1 bg-white/10 rounded-lg hover:bg-white/20" title="Settings">
+              <i class="fas fa-cog"></i>
+            </button>
+          </div>
+          <div id="warnConfig" class="hidden bg-gray-800/50 rounded-lg p-3 border border-gray-700 mb-3">
+            <div class="grid grid-cols-1 gap-3">
+              <label class="flex items-center">
+                <input type="checkbox" id="warnDmUser" class="rounded bg-gray-700 border-gray-600 text-blue-500 focus:ring-blue-500">
+                <span class="ml-2 text-sm">DM user about warning</span>
+              </label>
+              <div>
+                <label class="block text-sm mb-1">Default reason</label>
+                <input type="text" id="warnDefaultReason" class="w-full bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-white" placeholder="Please follow the server rules">
+              </div>
+              <button id="warnConfigSave" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm">Save</button>
+            </div>
+          </div>
+          <form id="warnForm" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Member</label>
+              <select name="userId" class="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <option value="" disabled selected>Select a member</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Reason</label>
+              <textarea name="reason" rows="2" placeholder="Please follow the server rules" class="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+            </div>
+            <button type="submit" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+              Issue Warning
+            </button>
+          </form>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+      </div>
+
+      <!-- Moderation Logs -->
+      <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d]">
+        <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-4 text-white">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold">Recent Moderation Actions</h3>
+          <div class="flex items-center space-x-2">
+            <select id="modLogsFilter" class="bg-gray-700/50 border border-gray-600 rounded-lg px-3 py-1 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="all">All Actions</option>
+              <option value="kick">Kicks</option>
+              <option value="ban">Bans</option>
+              <option value="warn">Warnings</option>
+              <option value="mute">Mutes</option>
+            </select>
+            <button id="exportModLogs" class="text-gray-400 hover:text-white transition-colors" title="Export Logs">
+              <i class="fas fa-file-export"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-700">
+            <thead>
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">User</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Action</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Moderator</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Reason</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Date</th>
+              </tr>
+            </thead>
+            <tbody id="modLogsTable" class="divide-y divide-gray-700">
+              <tr>
+                <td colspan="5" class="px-4 py-4 text-center text-sm text-gray-400">Loading moderation logs...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-4 flex justify-between items-center text-sm text-gray-400">
+          <div>
+            Showing <span id="modLogsStart">1</span> to <span id="modLogsEnd">10</span> of <span id="modLogsTotal">0</span> entries
+          </div>
+          <div class="flex space-x-2">
+            <button id="modLogsPrev" class="px-3 py-1 bg-gray-700/50 rounded-lg disabled:opacity-50" disabled>Previous</button>
+            <button id="modLogsNext" class="px-3 py-1 bg-gray-700/50 rounded-lg disabled:opacity-50" disabled>Next</button>
+          </div>
+        </div>
+        </div>
+        <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+      </div>
+    </div>
+
+    <!-- Automod Tab -->
+    <div id="automod-tab" class="tab-content hidden space-y-8">
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Auto-Moderation</h1>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d] p-3">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-3 text-white overflow-auto">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-lg font-semibold">Flagged Words</h3>
+                <p class="text-sm text-white/70">Block profanity, sexual content, and slurs.</p>
+              </div>
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="automodFlaggedWords" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:bg-green-600 transition-colors relative">
+                  <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+                </div>
+              </label>
+              <button id="automodFlaggedConfigToggle" class="ml-3 px-2 py-1 bg-white/10 rounded-lg hover:bg-white/20" title="Settings">
+                <i class="fas fa-cog"></i>
+              </button>
+            </div>
+            <div id="automodFlaggedConfig" class="hidden bg-gray-800/50 rounded-lg p-3 border border-gray-700 mt-3">
+              <div class="grid grid-cols-1 gap-3">
+                <div>
+                  <label class="block text-sm mb-1">Exempt roles (IDs, comma-separated)</label>
+                  <input type="text" id="automodFlaggedExemptRoles" class="w-full bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-white" placeholder="123,456">
+                </div>
+                <div>
+                  <label class="block text-sm mb-1">Exempt channels (IDs, comma-separated)</label>
+                  <input type="text" id="automodFlaggedExemptChannels" class="w-full bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-white" placeholder="789,101">
+                </div>
+                <button id="automodFlaggedConfigSave" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm">Save</button>
+              </div>
+            </div>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d]">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-6 text-white">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-lg font-semibold">Spam Messages</h3>
+                <p class="text-sm text-white/70">Block repeated spam messages.</p>
+              </div>
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="automodSpamMessages" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:bg-green-600 transition-colors relative">
+                  <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+                </div>
+              </label>
+              <button id="automodLinkConfigToggle" class="ml-3 px-2 py-1 bg-white/10 rounded-lg hover:bg-white/20" title="Settings">
+                <i class="fas fa-cog"></i>
+              </button>
+            </div>
+            <div id="automodLinkConfig" class="hidden bg-gray-800/50 rounded-lg p-3 border border-gray-700 mt-3">
+              <div class="grid grid-cols-1 gap-3">
+                <div>
+                  <label class="block text-sm mb-1">Allowed domains (comma-separated)</label>
+                  <input type="text" id="automodAllowedDomains" class="w-full bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-white" placeholder="discord.com, github.com">
+                </div>
+                <button id="automodLinkConfigSave" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm">Save</button>
+              </div>
+            </div>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d]">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-6 text-white">
+            <div class="flex items-center justify-between">
+              <div class="flex-1">
+                <h3 class="text-lg font-semibold">Mention Spam</h3>
+                <p class="text-sm text-white/70">Block messages with too many mentions.</p>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center space-x-3">
+              <input type="number" id="automodMentionLimit" min="2" placeholder="Limit (e.g. 5)" class="w-28 bg-white/10 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <button id="automodMentionEnable" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg">Enable</button>
+              <button id="automodMentionDisable" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg">Disable</button>
+            </div>
+            <p id="automodMentionStatus" class="mt-2 text-xs text-white/70"></p>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d]">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-6 text-white">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-lg font-semibold">Anti-Link</h3>
+                <p class="text-sm text-white/70">Block messages containing links.</p>
+              </div>
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="automodAntiLink" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:bg-green-600 transition-colors relative">
+                  <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+                </div>
+              </label>
+            </div>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d] md:col-span-2 p-3">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-3 text-white overflow-auto">
+            <div class="flex items-center justify-between">
+              <div class="flex-1">
+                <h3 class="text-lg font-semibold">Keyword Block</h3>
+                <p class="text-sm text-white/70">Block specific words from being used.</p>
+              </div>
+              <button id="automodKeywordConfigToggle" class="px-2 py-1 bg-white/10 rounded-lg hover:bg-white/20" title="Settings">
+                <i class="fas fa-cog"></i>
+              </button>
+            </div>
+            <div id="automodKeywordConfig" class="hidden bg-gray-800/50 rounded-lg p-3 border border-gray-700 mt-3">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-sm mb-1">Exempt roles</label>
+                  <input type="text" id="automodKeywordExemptRoles" class="w-full bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-white" placeholder="IDs, comma-separated">
+                </div>
+                <div>
+                  <label class="block text-sm mb-1">Exempt channels</label>
+                  <input type="text" id="automodKeywordExemptChannels" class="w-full bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-white" placeholder="IDs, comma-separated">
+                </div>
+              </div>
+              <button id="automodKeywordConfigSave" class="mt-3 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm">Save</button>
+            </div>
+            <div class="mt-3 flex items-center space-x-3">
+              <input type="text" id="automodKeywordInput" placeholder="Enter a keyword" class="flex-1 bg-white/10 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+              <button id="automodKeywordEnable" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg">Enable</button>
+              <button id="automodKeywordDisable" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg">Disable</button>
+            </div>
+            <p id="automodKeywordStatus" class="mt-2 text-xs text-white/70"></p>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Welcome Tab -->
+    <div id="welcome-tab" class="tab-content hidden space-y-8">
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Welcome / Goodbye</h1>
+      </div>
+      
+      <div class="space-y-3">
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d]">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] px-3 py-1.5 text-white">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <i class="fas fa-door-open text-green-400"></i>
+                <span class="font-medium">Welcome Messages</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="welcomeEnabled" class="sr-only peer" checked>
+                  <div class="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:bg-green-500 relative">
+                    <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+                  </div>
+                </label>
+                <button id="welcomeConfigToggle" class="px-2 py-1 bg-white/10 rounded-lg hover:bg-white/20">
+                  <i class="fas fa-cog"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+        <div id="welcomeDetails" class="hidden bg-gray-800/50 rounded-xl p-3 border border-gray-700">
+          <div class="space-y-3">
+            <div>
+              <label for="welcomeChannel" class="block text-sm font-medium mb-1">Welcome Channel</label>
+              <select id="welcomeChannel" class="w-full bg-white/10 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">Select a channel</option>
+              </select>
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label for="welcomeMessage" class="block text-sm font-medium">Welcome Message</label>
+                <div class="text-xs text-white/70">
+                  <span class="text-blue-400 cursor-pointer hover:underline" onclick="insertVariable('welcomeMessage', '{user}')">user</span> • 
+                  <span class="text-blue-400 cursor-pointer hover:underline" onclick="insertVariable('welcomeMessage', '{server}')">server</span> • 
+                  <span class="text-blue-400 cursor-pointer hover:underline" onclick="insertVariable('welcomeMessage', '{memberCount}')">memberCount</span>
+                </div>
+              </div>
+              <textarea id="welcomeMessage" rows="2" class="w-full bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Welcome {user} to {server}! 🎉"></textarea>
+            </div>
+            <div class="pt-2">
+              <div class="flex items-center justify-between mb-1">
+                <label class="flex items-center">
+                  <input type="checkbox" id="welcomeDMEnabled" class="rounded bg-gray-700 border-gray-600 text-blue-500 focus:ring-blue-500">
+                  <span class="ml-2 text-sm font-medium">Send Direct Message</span>
+                </label>
+              </div>
+              <textarea id="welcomeDMMessage" rows="2" class="w-full bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 mt-1" placeholder="Thanks for joining {server}! Enjoy your stay!" disabled></textarea>
+            </div>
+            <div class="pt-2">
+              <button onclick="previewWelcomeMessage()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                <i class="fas fa-eye mr-1"></i> Preview
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Goodbye removed per request -->
+
+      <div class="mt-3">
+        <div class="relative drop-shadow-xl w-56 h-48 overflow-hidden rounded-xl bg-[#3d3c3d]">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-3 text-white">
+            <h3 class="text-base font-semibold mb-2">Preview</h3>
+            <div id="previewContent" class="bg-gray-700/50 p-2 rounded-lg text-sm"></div>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logging Tab -->
+    <div id="logging-tab" class="tab-content hidden space-y-6">
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Logging</h1>
+        <div class="flex items-center space-x-2">
+          <button id="saveLoggingSettings" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+            <i class="fas fa-save"></i>
+            Save Settings
+          </button>
+        </div>
+      </div>
+
+      <!-- Logging Overview -->
+      <div class="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+        <h2 class="text-xl font-semibold mb-4 flex items-center">
+          <i class="fas fa-info-circle text-blue-400 mr-2"></i>
+          Logging Overview
+        </h2>
+        <p class="text-gray-300 mb-4">Configure where different types of logs will be sent. Each log type can be sent to a different channel.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-medium">All Logs</h3>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="allLogsEnabled" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            <p class="text-sm text-gray-400 mb-3">All server events in one channel</p>
+            <select id="allLogsChannel" class="w-full bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+              <option value="">Select a channel</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Log Categories -->
+      <div class="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+        <h2 class="text-xl font-semibold mb-4 flex items-center">
+          <i class="fas fa-tags text-purple-400 mr-2"></i>
+          Log Categories
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Message Logs -->
+          <div class="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-medium">Message Logs</h3>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="messageLogsEnabled" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            <p class="text-sm text-gray-400 mb-3">Message edits, deletions, and bulk deletes</p>
+            <select id="messageLogsChannel" class="w-full bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+              <option value="">Select a channel</option>
+            </select>
+          </div>
+
+          <!-- Member Logs -->
+          <div class="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-medium">Member Logs</h3>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="memberLogsEnabled" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            <p class="text-sm text-gray-400 mb-3">Joins, leaves, bans, and role updates</p>
+            <select id="memberLogsChannel" class="w-full bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+              <option value="">Select a channel</option>
+            </select>
+          </div>
+
+          <!-- Server Logs -->
+          <div class="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-medium">Server Logs</h3>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="guildLogsEnabled" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            <p class="text-sm text-gray-400 mb-3">Server updates, emoji changes, and vanity URL</p>
+            <select id="guildLogsChannel" class="w-full bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+              <option value="">Select a channel</option>
+            </select>
+          </div>
+
+          <!-- Voice Logs -->
+          <div class="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-medium">Voice Logs</h3>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="voiceLogsEnabled" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            <p class="text-sm text-gray-400 mb-3">Voice channel joins, leaves, and moves</p>
+            <select id="voiceLogsChannel" class="w-full bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+              <option value="">Select a channel</option>
+            </select>
+          </div>
+
+          <!-- Channel Logs -->
+          <div class="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-medium">Channel Logs</h3>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="channelLogsEnabled" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            <p class="text-sm text-gray-400 mb-3">Channel create, delete, and updates</p>
+            <select id="channelLogsChannel" class="w-full bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+              <option value="">Select a channel</option>
+            </select>
+          </div>
+
+          <!-- Role Logs -->
+          <div class="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-medium">Role Logs</h3>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="roleLogsEnabled" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+            <p class="text-sm text-gray-400 mb-3">Role create, delete, and updates</p>
+            <select id="roleLogsChannel" class="w-full bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+              <option value="">Select a channel</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Log Preview -->
+      <div class="bg-gray-800/50 rounded-xl p-6 border border-gray-700">
+        <h2 class="text-xl font-semibold mb-4 flex items-center">
+          <i class="fas fa-eye text-green-400 mr-2"></i>
+          Log Preview
+        </h2>
+        <p class="text-gray-300 mb-4">See how your logs will look with the current settings note this is still in active development!</p>
+        
+        <div class="bg-gray-900/50 p-4 rounded-lg border border-gray-700">
+          <div class="flex items-start mb-4">
+            <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center mr-3 flex-shrink-0">
+              <i class="fas fa-robot text-white"></i>
+            </div>
+            <div class="bg-gray-800/80 rounded-lg p-3 max-w-2xl">
+              <div class="flex items-center mb-1">
+                <span class="font-semibold text-blue-400">Moderator Bot</span>
+                <span class="text-xs text-gray-400 ml-2">Today at 12:34 PM</span>
+              </div>
+              <div class="text-gray-200">
+                <p>✅ Logging system is now active. All configured events will be logged to their respective channels.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="text-xs text-gray-400 mt-2 flex items-center">
+            <i class="fas fa-info-circle mr-1"></i>
+            This is a preview. Actual logs will include detailed information about each event.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tickets Tab -->
+    <div id="tickets-tab" class="tab-content hidden space-y-8">
+      <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-bold">Tickets</h2>
+        <div class="flex gap-2">
+          <button id="saveTicketSettingsBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg">Save Settings</button>
+          <button id="sendTicketPanelBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg">Send Panel</button>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d] p-3">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-3 text-white space-y-4 overflow-auto">
+          <h3 class="text-xl font-semibold">Core Settings</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Ticket Panel Channel</label>
+              <select id="ticketPanelChannel" class="w-full bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg p-2.5">
+                <option value="">Select a channel</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Transcripts Channel</label>
+              <select id="ticketTranscriptsChannel" class="w-full bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg p-2.5">
+                <option value="">Select a channel</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Handlers Role</label>
+              <select id="ticketHandlersRole" class="w-full bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg p-2.5">
+                <option value="">Select a role</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Everyone Role</label>
+              <select id="ticketEveryoneRole" class="w-full bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg p-2.5">
+                <option value="">Select a role</option>
+              </select>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm text-gray-400 mb-1">Description</label>
+              <textarea id="ticketDescription" class="w-full bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg p-2.5" rows="3" placeholder="Description shown on ticket panel"></textarea>
+            </div>
+          </div>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+
+        <div class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d] p-3">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-3 text-white space-y-4 overflow-auto">
+          <h3 class="text-xl font-semibold">Categories</h3>
+          <div id="ticketCategoriesContainer" class="space-y-4"></div>
+          <button id="addTicketCategoryBtn" class="px-3 py-2 bg-purple-600 hover:bg-purple-700 rounded">Add Category</button>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications Tab -->
+    <div id="notifications-tab" class="tab-content hidden space-y-8">
+      <div class="flex justify-between items-center">
+        <h2 class="text-3xl font-bold">Notifications</h2>
+      </div>
+
+      <!-- Notification Type Tabs -->
+      <div class="border-b border-gray-700">
+        <div class="flex space-x-1">
+          <button type="button" data-notification-type="all" class="notification-type-tab active px-4 py-2 text-sm font-medium rounded-t-lg transition-colors">
+            All Notifications
+          </button>
+          <button type="button" data-notification-type="twitch" class="notification-type-tab px-4 py-2 text-sm font-medium rounded-t-lg transition-colors">
+            <i class="fab fa-twitch mr-1"></i> Twitch
+          </button>
+          <button type="button" data-notification-type="youtube" class="notification-type-tab px-4 py-2 text-sm font-medium rounded-t-lg transition-colors">
+            <i class="fab fa-youtube mr-1"></i> YouTube
+          </button>
+        </div>
+      </div>
+
+      <!-- Notifications Container -->
+      <div class="space-y-4">
+        <!-- Notifications will be loaded here -->
+        <div id="notificationsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Notifications will be inserted here -->
+        </div>
+
+      <!-- Empty State (shown by default) -->
+        <div id="noNotifications" class="relative drop-shadow-xl w-full overflow-hidden rounded-xl bg-[#3d3c3d] text-center py-12 p-4">
+          <div class="absolute z-[1] opacity-90 rounded-xl inset-0.5 bg-[#323132] p-4 text-white overflow-auto">
+            <div class="max-w-md mx-auto">
+              <div class="bg-blue-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-bell text-2xl text-blue-400"></i>
+              </div>
+              <h3 class="text-lg font-medium mb-2">No Notifications Set Up</h3>
+              <p class="text-white/70 mb-4">Add Twitch or YouTube notifications to get started</p>
+              <div class="flex justify-center space-x-3">
+                <button id="addFirstTwitch" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                  <i class="fab fa-twitch"></i>
+                  Add Twitch
+                </button>
+                <button id="addFirstYoutube" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                  <i class="fab fa-youtube"></i>
+                  Add YouTube
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="absolute w-56 h-48 bg-white blur-[50px] -left-1/2 -top-1/2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const activateBtn = document.getElementById('activateGuildPremium');
+  const deactivateBtn = document.getElementById('deactivateGuildPremium');
+  const planSelect = document.getElementById('guildPremiumPlan');
+  const currentGuildId = '<%= guild.id %>';
+
+  if (activateBtn) {
+    activateBtn.addEventListener('click', async () => {
+      const plan = planSelect.value;
+      const res = await fetch(`/guild/${currentGuildId}/premium/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ plan })
+      });
+      if (res.ok) {
+        location.reload();
+      }
+    });
+  }
+
+  if (deactivateBtn) {
+    deactivateBtn.addEventListener('click', async () => {
+      const res = await fetch(`/guild/${currentGuildId}/premium/deactivate`, { method: 'POST' });
+      if (res.ok) {
+        location.reload();
+      }
+    });
+  }
+</script>
+<!-- Add Notification Modal -->
+<div id="addTwitchModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+  <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md mx-4">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold">Add Twitch Notification</h3>
+      <button id="closeModal" class="text-gray-400 hover:text-white">
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+    </div>
+
+    <form id="twitchForm" class="space-y-4">
+      <div>
+        <label class="block text-gray-300 text-sm font-medium mb-2">Channel to Notify *</label>
+        <select id="notificationChannel" required
+                class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+          <option value="" disabled selected>Loading channels...</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-gray-300 text-sm font-medium mb-2">Twitch Username *</label>
+        <input type="text" id="twitchUsername" required
+               placeholder="Enter Twitch username"
+               class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+      </div>
+
+      <div>
+        <label class="block text-gray-300 text-sm font-medium mb-2">Custom Message</label>
+        <textarea id="customMessage"
+                 placeholder="e.g., {streamer} is now live! Check them out at {url}"
+                 class="w-full h-24 bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"></textarea>
+        <p class="text-xs text-gray-400 mt-1">Available variables: {streamer}, {url}, {title}, {game}</p>
+      </div>
+
+      <!-- Preview Section -->
+      <div id="previewContainer" class="mt-4 hidden">
+        <h3 class="text-sm font-medium text-gray-300 mb-2">Preview:</h3>
+        <div id="previewContent" class="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+          <div class="flex items-center gap-4">
+            <div class="bg-purple-500/20 p-3 rounded-lg">
+              <i class="fab fa-twitch text-purple-400 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-medium" id="previewUsername">streamer_name</h3>
+              <p class="text-sm text-gray-400" id="previewChannel">#channel_name</p>
+              <p class="text-xs text-gray-500 mt-1" id="previewMessage">Preview message will appear here</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2.5 rounded-lg font-medium transition-colors">
+          Add Notification
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="addYoutubeModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+  <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md mx-4">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold">Add YouTube Notification</h3>
+      <button id="closeYoutubeModal" class="text-gray-400 hover:text-white">
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+    </div>
+
+    <form id="youtubeForm" class="space-y-4">
+      <div>
+        <label class="block text-gray-300 text-sm font-medium mb-2">Channel to Notify *</label>
+        <select id="youtubeNotificationChannel" required
+                class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500">
+          <option value="" disabled selected>Loading channels...</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-gray-300 text-sm font-medium mb-2">YouTube Channel URL *</label>
+        <input type="text" id="youtubeChannelName" required
+               placeholder="https://youtube.com/@channelhandle or https://youtube.com/channel/ID"
+               class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500">
+      </div>
+
+      <div>
+        <label class="block text-gray-300 text-sm font-medium mb-2">Custom Message</label>
+        <textarea id="youtubeCustomMessage"
+                 placeholder="e.g., New video from {channel}: {title} {url}"
+                 class="w-full h-24 bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"></textarea>
+        <p class="text-xs text-gray-400 mt-1">Available variables: {channel}, {title}, {url}</p>
+      </div>
+
+      <div class="pt-2">
+        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-lg font-medium transition-colors">
+          Add Notification
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+// Tab handling
+const sidebarTabs = document.querySelectorAll('.sidebar-tab');
+const tabContents = document.querySelectorAll('.tab-content');
+const tabTriggers = document.querySelectorAll('.tab-trigger');
+const memberSelects = document.querySelectorAll('select[name="userId"]');
+let membersLoaded = false;
+let membersLoading = false;
+
+function setActiveTab(tabName) {
+  const targetId = `${tabName}-tab`;
+
+  tabContents.forEach((section) => {
+    section.classList.toggle('hidden', section.id !== targetId);
+  });
+
+  sidebarTabs.forEach((tab) => {
+    const isActive = tab.dataset.tab === tabName;
+    tab.classList.toggle('active-tab', isActive);
+    tab.classList.toggle('bg-gray-700', isActive);
+    tab.classList.toggle('text-white', isActive);
+  });
+
+  if (tabName === 'moderation' && !membersLoaded) {
+    loadMembers();
+  }
+  if (tabName === 'automod') {
+    if (typeof initAutomod === 'function') initAutomod();
+  }
+  if (tabName === 'tickets') {
+    if (typeof initTickets === 'function') initTickets();
+  }
+
+  if (location.hash !== `#${tabName}`) {
+    history.replaceState(null, '', `#${tabName}`);
+  }
+}
+
+function handleTabClick(event) {
+  event.preventDefault();
+  const { tab } = event.currentTarget.dataset;
+  if (tab) setActiveTab(tab);
+}
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const initialTab = (location.hash || '#overview').replace('#', '');
+    sidebarTabs.forEach((tab) => tab.addEventListener('click', handleTabClick));
+    tabTriggers.forEach((trigger) => trigger.addEventListener('click', handleTabClick));
+    setActiveTab(initialTab || 'overview');
+    loadMembers(); // pre-load members so selects work immediately
+  });
+
+// DOM Elements
+const addTwitchModal = document.getElementById('addTwitchModal');
+const closeModal = document.getElementById('closeModal');
+const twitchForm = document.getElementById('twitchForm');
+const noNotifications = document.getElementById('noNotifications');
+const notificationChannel = document.getElementById('notificationChannel');
+const notificationsContainer = document.getElementById('notificationsContainer');
+const addTwitchActionBtn = document.getElementById('addTwitchActionBtn');
+const addYoutubeActionBtn = document.getElementById('addYoutubeActionBtn');
+const addYoutubeModal = document.getElementById('addYoutubeModal');
+const closeYoutubeModal = document.getElementById('closeYoutubeModal');
+const youtubeForm = document.getElementById('youtubeForm');
+const youtubeNotificationChannel = document.getElementById('youtubeNotificationChannel');
+const youtubeChannelName = document.getElementById('youtubeChannelName');
+const youtubeCustomMessage = document.getElementById('youtubeCustomMessage');
+
+// Load channels for notifications
+async function loadChannels() {
+  try {
+    console.log('Loading channels for notifications...');
+    await loadChannelsForDropdowns(['notificationChannel']);
+  } catch (error) {
+    console.error('Error loading channels:', error);
+    showNotification('error', 'Failed to load channels. Please try again.');
+  }
+}
+
+// Load guild members for moderation actions
+async function loadMembers() {
+  if (membersLoaded || membersLoading) return;
+  membersLoading = true;
+  try {
+    const response = await fetch(`/api/guilds/<%= guild.id %>/members`, {
+      credentials: 'include',
+      headers: getAuthHeaders()
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, ${error}`);
+    }
+
+    const members = await response.json();
+    membersLoaded = true;
+
+    memberSelects.forEach((select) => {
+      select.innerHTML = '<option value="" disabled selected>Select a member</option>';
+      members.forEach((member) => {
+        const option = document.createElement('option');
+        option.value = member.id;
+        option.textContent = member.displayName || member.tag || member.id;
+        select.appendChild(option);
+      });
+    });
+  } catch (error) {
+    console.error('Error loading members:', error);
+    if (!membersLoaded) {
+      showNotification(
+        'error',
+        'Failed to load members. ' + (error.message || 'Check your permissions and bot intents.')
+      );
+    }
+  } finally {
+    membersLoading = false;
+  }
+}
+
+// Moderation action handlers
+const kickForm = document.getElementById('kickForm');
+const banForm = document.getElementById('banForm');
+const warnForm = document.getElementById('warnForm');
+
+async function handleModerationAction(endpoint, body, successMessagePrefix) {
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders(),
+      },
+      credentials: 'include',
+      body: JSON.stringify(body),
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok || data.error) {
+      const errorMsg = data.error || data.message || `Failed with status ${response.status}`;
+      showNotification('error', errorMsg);
+      return;
+    }
+
+    showNotification('success', data.message || successMessagePrefix + ' successfully.');
+  } catch (err) {
+    console.error('Moderation action error:', err);
+    showNotification('error', err.message || 'Unexpected error performing action.');
+  }
+}
+
+  if (kickForm) {
+    kickForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(kickForm);
+      const userId = formData.get('userId');
+      const reason = formData.get('reason') || (window.modConfig?.kick?.defaultReason) || 'No reason provided';
+      if (!userId) {
+        showNotification('error', 'Please select a member to kick.');
+        return;
+      }
+      handleModerationAction(
+        `/api/guilds/<%= guild.id %>/kick`,
+        { userId, reason, dm: !!(window.modConfig?.kick?.dm) },
+        'Member kicked',
+      );
+    });
+  }
+
+  if (banForm) {
+    banForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(banForm);
+      const userId = formData.get('userId');
+      const reason = formData.get('reason') || (window.modConfig?.ban?.defaultReason) || 'No reason provided';
+      const daysInput = Number(formData.get('days')) || 0;
+      const days = daysInput || Number(window.modConfig?.ban?.deleteDaysDefault) || 0;
+      if (!userId) {
+        showNotification('error', 'Please select a member to ban.');
+        return;
+      }
+      handleModerationAction(
+        `/api/guilds/<%= guild.id %>/ban`,
+        { userId, reason, deleteMessages: days > 0, dm: !!(window.modConfig?.ban?.dm) },
+        'Member banned',
+      );
+    });
+  }
+
+  if (warnForm) {
+    warnForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(warnForm);
+      const userId = formData.get('userId');
+      const reason = formData.get('reason') || (window.modConfig?.warn?.defaultReason) || 'No reason provided';
+      if (!userId) {
+        showNotification('error', 'Please select a member to warn.');
+        return;
+      }
+      handleModerationAction(
+        `/api/guilds/<%= guild.id %>/warn`,
+        { userId, reason, dm: !!(window.modConfig?.warn?.dm) },
+        'Member warned',
+      );
+    });
+  }
+
+// Moderation card configs
+window.modConfig = {
+  kick: { dm: false, defaultReason: '' },
+  ban: { dm: false, defaultReason: '', deleteDaysDefault: 0 },
+  warn: { dm: false, defaultReason: '' }
+};
+
+document.getElementById('kickConfigToggle')?.addEventListener('click', () => {
+  document.getElementById('kickConfig')?.classList.toggle('hidden');
+});
+document.getElementById('banConfigToggle')?.addEventListener('click', () => {
+  document.getElementById('banConfig')?.classList.toggle('hidden');
+});
+document.getElementById('warnConfigToggle')?.addEventListener('click', () => {
+  document.getElementById('warnConfig')?.classList.toggle('hidden');
+});
+
+document.getElementById('kickConfigSave')?.addEventListener('click', () => {
+  window.modConfig.kick.dm = !!document.getElementById('kickDmUser')?.checked;
+  window.modConfig.kick.defaultReason = document.getElementById('kickDefaultReason')?.value || '';
+  showNotification('success', 'Kick settings saved');
+});
+document.getElementById('banConfigSave')?.addEventListener('click', () => {
+  window.modConfig.ban.dm = !!document.getElementById('banDmUser')?.checked;
+  window.modConfig.ban.defaultReason = document.getElementById('banDefaultReason')?.value || '';
+  window.modConfig.ban.deleteDaysDefault = Number(document.getElementById('banDeleteDaysDefault')?.value) || 0;
+  showNotification('success', 'Ban settings saved');
+});
+document.getElementById('warnConfigSave')?.addEventListener('click', () => {
+  window.modConfig.warn.dm = !!document.getElementById('warnDmUser')?.checked;
+  window.modConfig.warn.defaultReason = document.getElementById('warnDefaultReason')?.value || '';
+  showNotification('success', 'Warn settings saved');
+});
+
+// Automod config toggles
+document.getElementById('automodFlaggedConfigToggle')?.addEventListener('click', () => {
+  document.getElementById('automodFlaggedConfig')?.classList.toggle('hidden');
+});
+document.getElementById('automodKeywordConfigToggle')?.addEventListener('click', () => {
+  document.getElementById('automodKeywordConfig')?.classList.toggle('hidden');
+});
+document.getElementById('automodLinkConfigToggle')?.addEventListener('click', () => {
+  document.getElementById('automodLinkConfig')?.classList.toggle('hidden');
+});
+// Toggle modal
+function toggleModal() {
+  addTwitchModal.classList.toggle('hidden');
+  if (!addTwitchModal.classList.contains('hidden')) {
+    loadChannels();
+    updatePreview();
+  }
+}
+
+function toggleYoutubeModal() {
+  addYoutubeModal.classList.toggle('hidden');
+  if (!addYoutubeModal.classList.contains('hidden')) {
+    loadYoutubeChannels();
+  }
+}
+
+// Event listeners
+closeModal.addEventListener('click', toggleModal);
+addTwitchModal.addEventListener('click', (e) => {
+  if (e.target === addTwitchModal) toggleModal();
+});
+addTwitchActionBtn.addEventListener('click', toggleModal);
+addYoutubeActionBtn.addEventListener('click', toggleYoutubeModal);
+closeYoutubeModal.addEventListener('click', toggleYoutubeModal);
+addYoutubeModal.addEventListener('click', (e) => {
+  if (e.target === addYoutubeModal) toggleYoutubeModal();
+});
+
+// Form Submission
+twitchForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const channelId = notificationChannel.value;
+  const twitchUsername = document.getElementById('twitchUsername').value.trim();
+  const customMessage = document.getElementById('customMessage').value.trim();
+  
+  if (!channelId || !twitchUsername) {
+    showNotification('error', 'Please fill in all required fields');
+    return;
+  }
+  
+  // Default message if none provided
+  const message = customMessage || "{streamer} is now live! Check them out at {url}";
+  
+  try {
+    const response = await fetch(`/api/guilds/<%= guild.id %>/twitch`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        Channel: channelId,
+        Streamer: twitchUsername,
+        Message: message,
+        Guild: '<%= guild.id %>'
+      })
+    });
+    
+    const responseText = await response.text();
+    console.log('Raw response:', responseText);
+    
+    let responseData;
+    try {
+      responseData = JSON.parse(responseText);
+    } catch (e) {
+      throw new Error(`Invalid JSON response: ${responseText}`);
+    }
+    
+    if (!response.ok) {
+      console.error('Error response:', responseData);
+      throw new Error(responseData.error || responseData.message || `Failed to add notification: ${response.statusText}`);
+    }
+    
+    console.log('Notification added successfully:', responseData);
+    showNotification('success', 'Twitch notification added successfully!');
+    
+    // Reset form and close modal
+    twitchForm.reset();
+    toggleModal();
+    
+    // Reload notifications
+    await loadNotifications();
+    
+  } catch (error) {
+    console.error('Error adding notification:', error);
+    showNotification('error', error.message || 'Failed to add notification');
+  }
+});
+
+// Update preview
+function updatePreview() {
+  const channelId = notificationChannel.value;
+  const twitchUsername = document.getElementById('twitchUsername').value.trim();
+  const customMessage = document.getElementById('customMessage').value.trim();
+  const previewContainer = document.getElementById('previewContainer');
+  
+  if (!channelId || !twitchUsername) {
+    previewContainer.classList.add('hidden');
+    return;
+  }
+  
+  const selectedChannel = notificationChannel.options[notificationChannel.selectedIndex];
+  const message = customMessage || "{streamer} is now live! Check them out at {url}";
+  
+  document.getElementById('previewUsername').textContent = twitchUsername;
+  document.getElementById('previewChannel').textContent = selectedChannel.textContent;
+  document.getElementById('previewMessage').textContent = message
+    .replace('{streamer}', twitchUsername)
+    .replace('{url}', `https://twitch.tv/${twitchUsername}`)
+    .replace('{title}', 'Stream Title')
+    .replace('{game}', 'Game Name');
+  
+  previewContainer.classList.remove('hidden');
+}
+
+// Add event listeners for live preview
+notificationChannel.addEventListener('change', updatePreview);
+document.getElementById('twitchUsername').addEventListener('input', updatePreview);
+document.getElementById('customMessage').addEventListener('input', updatePreview);
+
+// Load notifications with support for both Twitch and YouTube
+async function loadNotifications(type = 'all') {
+  const notificationsContainer = document.getElementById('notificationsContainer');
+  const noNotifications = document.getElementById('noNotifications');
+  
+  try {
+    // Show loading state
+    notificationsContainer.innerHTML = `
+      <div class="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center items-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    `;
+    
+    // Hide empty state while loading
+    noNotifications.style.display = 'none';
+    
+    // Fetch notifications based on type
+    let notifications = [];
+    
+    if (type === 'all' || type === 'twitch') {
+      const response = await fetch(`/api/guilds/<%= guild.id %>/twitch`, {
+        credentials: 'include',
+        headers: getAuthHeaders()
+      });
+      if (response.ok) {
+        const data = await response.json();
+        notifications = [...notifications, ...data.map(n => ({ ...n, type: 'twitch' }))];
+      }
+    }
+    
+    if (type === 'all' || type === 'youtube') {
+      const response = await fetch(`/api/guilds/<%= guild.id %>/youtube`, {
+        credentials: 'include',
+        headers: getAuthHeaders()
+      });
+      if (response.ok) {
+        const data = await response.json();
+        notifications = [...notifications, ...data.map(n => ({ ...n, type: 'youtube' }))];
+      }
+    }
+    
+    // Filter by type if not 'all'
+    if (type !== 'all') {
+      notifications = notifications.filter(n => n.type === type);
+    }
+    
+    // Render the notifications
+    renderNotifications(notifications);
+    
+    // Show empty state if no notifications
+    if (notifications.length === 0) {
+      noNotifications.style.display = 'block';
+      const emptyTitle = noNotifications.querySelector('h3');
+      const emptyMessage = noNotifications.querySelector('p');
+      
+      if (type === 'twitch') {
+        emptyTitle.textContent = 'No Twitch Notifications';
+        emptyMessage.textContent = 'Click the "Add Twitch" button to get started';
+      } else if (type === 'youtube') {
+        emptyTitle.textContent = 'No YouTube Notifications';
+        emptyMessage.textContent = 'YouTube notifications coming soon!';
+      } else {
+        emptyTitle.textContent = 'No Notifications Set Up';
+        emptyMessage.textContent = 'Add Twitch or YouTube notifications to get started';
+      }
+    } else {
+      noNotifications.style.display = 'none';
+    }
+    
+  } catch (error) {
+    console.error('Error loading notifications:', error);
+    showNotification('error', 'Failed to load notifications. Please try again.');
+    noNotifications.style.display = 'block';
+  }
+}
+
+// Render notifications in the card grid
+function renderNotifications(notifications) {
+  const notificationsContainer = document.getElementById('notificationsContainer');
+  const noNotifications = document.getElementById('noNotifications');
+  
+  if (!notifications || notifications.length === 0) {
+    noNotifications.style.display = 'block';
+    notificationsContainer.innerHTML = '';
+    return;
+  }
+  
+  noNotifications.style.display = 'none';
+  
+  notificationsContainer.innerHTML = notifications.map(notification => {
+    const isTwitch = notification.type === 'twitch';
+    const platform = isTwitch ? 'Twitch' : 'YouTube';
+    const iconClass = isTwitch ? 'fab fa-twitch text-purple-400' : 'fab fa-youtube text-red-500';
+    const bgColor = isTwitch ? 'bg-purple-500/20' : 'bg-red-500/20';
+    const actionColor = isTwitch ? 'bg-purple-600 hover:bg-purple-700' : 'bg-red-600 hover:bg-red-700';
+    
+    return `
+      <div class="notification-card group" data-type="${notification.type}">
+        <div class="relative bg-gray-800/50 rounded-xl border border-gray-700 overflow-hidden transition-all duration-300 hover:border-${isTwitch ? 'purple' : 'red'}-500">
+          <!-- Platform Header -->
+          <div class="px-3 py-2 ${isTwitch ? 'bg-purple-500/10' : 'bg-red-500/10'} border-b border-${isTwitch ? 'purple' : 'red'}-500/20 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <i class="${iconClass}"></i>
+              <span class="text-sm font-medium">${platform} Notification</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs px-2 py-1 rounded-full ${isTwitch ? 'bg-purple-500/20 text-purple-300' : 'bg-red-500/20 text-red-300'}">
+                ${notification.channelName ? `#${notification.channelName}` : 'No channel'}
+              </span>
+              <button class="px-2 py-1 bg-white/10 rounded-lg hover:bg-white/20" title="Settings" onclick="toggleNotificationConfig('${notification._id}')">
+                <i class="fas fa-cog"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Content -->
+          <div class="p-3">
+            <div class="flex items-start space-x-4">
+              <div class="flex-shrink-0">
+                <div class="h-10 w-10 ${bgColor} rounded-lg flex items-center justify-center">
+                  <i class="${iconClass} text-lg"></i>
+                </div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <h3 class="text-sm font-medium text-white truncate">${notification.Streamer || notification.ChannelName || notification.YouTubeChannel || notification.youtubeChannel || 'Unknown'}</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">
+                  ${notification.Message || (isTwitch ? '{streamer} is now live! {url}' : '{channel} uploaded a new video: {title} {url}')}
+                </p>
+              </div>
+            </div>
+            
+            <!-- Inline Config Panel -->
+            <div id="notificationConfig-${notification._id}" class="hidden bg-gray-800/50 rounded-lg p-3 border border-gray-700 mt-3">
+              <div class="grid grid-cols-1 gap-3">
+                <div>
+                  <label class="block text-xs mb-1">Custom Message</label>
+                  <textarea id="notificationMsg-${notification._id}" rows="2" class="w-full bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-white" placeholder="${isTwitch ? '{streamer} is now live! {url}' : '{channel} uploaded a new video: {title} {url}'}">${notification.Message || ''}</textarea>
+                  <p class="text-[10px] text-white/60 mt-1">Vars: ${isTwitch ? '{streamer} {url}' : '{channel} {title} {url}'}</p>
+                </div>
+                <button class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm" onclick="saveNotificationConfig('${notification._id}', '${notification.type}')">Save</button>
+              </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="mt-4 flex items-center justify-between border-t border-gray-700 pt-3">
+              <div class="text-xs text-gray-400">
+                Last updated: ${new Date(notification.updatedAt || Date.now()).toLocaleString()}
+              </div>
+              <div class="flex space-x-2">
+                ${isTwitch ? `<button onclick="testNotification('${notification._id}', '${notification.type}')" class="text-xs ${actionColor} text-white px-3 py-1.5 rounded-lg transition-colors"><i class="fas fa-bell mr-1"></i> Test</button>` : ``}
+                <button onclick="deleteNotification('${notification._id}', '${notification.type}')" 
+                        class="text-xs bg-gray-600 hover:bg-gray-500 text-white px-3 py-1.5 rounded-lg transition-colors">
+                  <i class="fas fa-trash-alt mr-1"></i> Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Show empty state if no notifications after filtering
+  if (notifications.length === 0) {
+    noNotifications.style.display = 'block';
+    
+    // Update empty state based on filter
+    const emptyState = noNotifications.querySelector('h3');
+    const emptyMessage = noNotifications.querySelector('p');
+    const filterType = document.querySelector('.notification-type-tab.active')?.dataset.notificationType;
+    
+    if (filterType === 'twitch') {
+      emptyState.textContent = 'No Twitch Notifications';
+      emptyMessage.textContent = 'Get notified when your favorite streamers go live';
+    } else if (filterType === 'youtube') {
+      emptyState.textContent = 'No YouTube Notifications';
+      emptyMessage.textContent = 'Get notified when your favorite channels upload new videos';
+    } else {
+      emptyState.textContent = 'No Notifications Set Up';
+      emptyMessage.textContent = 'Add Twitch or YouTube notifications to get started';
+    }
+  }
+}
+
+function toggleNotificationConfig(id) {
+  const panel = document.getElementById(`notificationConfig-${id}`);
+  if (panel) panel.classList.toggle('hidden');
+}
+
+function saveNotificationConfig(id, type) {
+  const textarea = document.getElementById(`notificationMsg-${id}`);
+  const value = textarea?.value || '';
+  showNotification('success', 'Notification settings saved');
+  // Placeholder for backend update if available:
+  // fetch(`/api/guilds/<%= guild.id %>/notifications/${id}`, { method: 'PATCH', body: JSON.stringify({ message: value }) })
+}
+// Update test and delete notification functions to handle types
+async function testNotification(id, type = 'twitch') {
+  try {
+    const response = await fetch(`/api/guilds/<%= guild.id %>/${type}/${id}/test`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: getAuthHeaders()
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error || 'Failed to test notification');
+    }
+
+    showNotification('success', `Test ${type} notification sent successfully!`);
+  } catch (error) {
+    console.error(`Error testing ${type} notification:`, error);
+    showNotification('error', error.message || `Failed to test ${type} notification`);
+  }
+}
+
+async function deleteNotification(id, type = 'twitch') {
+  if (!confirm(`Are you sure you want to delete this ${type} notification?`)) return;
+  
+  try {
+    const response = await fetch(`/api/guilds/<%= guild.id %>/${type}/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: getAuthHeaders()
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error || `Failed to delete ${type} notification`);
+    }
+
+    showNotification('success', `${type === 'twitch' ? 'Twitch' : 'YouTube'} notification deleted successfully!`);
+    loadNotifications(document.querySelector('.notification-type-tab.active')?.dataset.notificationType || 'all');
+  } catch (error) {
+    console.error(`Error deleting ${type} notification:`, error);
+    showNotification('error', error.message || `Failed to delete ${type} notification`);
+  }
+}
+
+// Add event listeners for notification type tabs
+document.addEventListener('DOMContentLoaded', () => {
+  // Notification type tabs
+  const notificationTypeTabs = document.querySelectorAll('.notification-type-tab');
+  notificationTypeTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      notificationTypeTabs.forEach(t => t.classList.remove('active', 'bg-gray-700/50', 'text-white'));
+      tab.classList.add('active', 'bg-gray-700/50', 'text-white');
+      loadNotifications(tab.dataset.notificationType);
+    });
+  });
+
+  // Add First Notification buttons
+  const addFirstTwitch = document.getElementById('addFirstTwitch');
+  const addFirstYoutube = document.getElementById('addFirstYoutube');
+  const addTwitchBtn = document.getElementById('addTwitchBtn');
+
+  if (addFirstTwitch) {
+    addFirstTwitch.addEventListener('click', () => {
+      toggleModal();
+    });
+  }
+  
+  if (addFirstYoutube) {
+    addFirstYoutube.addEventListener('click', () => {
+      toggleYoutubeModal();
+    });
+  }
+});
+
+async function loadYoutubeChannels() {
+  try {
+    const channels = await loadChannelsForDropdowns(['youtubeNotificationChannel']);
+    return channels;
+  } catch (_) {}
+}
+
+youtubeForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const channelId = youtubeNotificationChannel.value;
+  const channelName = youtubeChannelName.value.trim();
+  const customMessage = youtubeCustomMessage.value.trim();
+  if (!channelId || !channelName) {
+    showNotification('error', 'Please fill in all required fields');
+    return;
+  }
+  const message = customMessage || `New video from {channel}: {title}\n{url}`;
+  try {
+    const response = await fetch(`/api/guilds/<%= guild.id %>/youtube`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        channelId: channelId,
+        youtubeChannel: channelName,
+        message: message
+      })
+    });
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(errText || 'Failed to add YouTube notification');
+    }
+    showNotification('success', 'YouTube notification added successfully!');
+    youtubeForm.reset();
+    toggleYoutubeModal();
+    await loadNotifications('youtube');
+  } catch (error) {
+    showNotification('error', error.message || 'Failed to add YouTube notification');
+  }
+});
+
+// Helper function to show inline notifications
+function showNotification(type, message, duration = 5000) {
+  // Create notification element
+  const notification = document.createElement('div');
+  if (type === 'success') {
+    notification.className = 'animate-fade-in';
+    notification.innerHTML = `
+      <div class="flex flex-col gap-2 w-60 sm:w-72 text-[10px] sm:text-xs z-50">
+        <div class="succsess-alert cursor-default flex items-center justify-between w-full h-12 sm:h-14 rounded-lg bg-[#232531] px-[10px]">
+          <div class="flex gap-2">
+            <div class="text-[#2b9875] bg-white/5 backdrop-blur-xl p-1 rounded-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-white">${message || 'done successfully :)'}</p>
+              <p class="text-gray-500">This is the description section</p>
+            </div>
+          </div>
+          <button class="close-notification text-gray-600 hover:bg-white/5 p-1 rounded-md transition-colors ease-linear">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `;
+  } else {
+    notification.className = `notification ${type} bg-gray-800/90 backdrop-blur-sm text-white p-4 rounded-lg shadow-lg border-l-4 ${
+      type === 'error' ? 'border-red-500' :
+      type === 'info' ? 'border-blue-500' :
+      type === 'warning' ? 'border-yellow-500' : 'border-gray-500'
+    } mb-4 animate-fade-in w-full`;
+    notification.innerHTML = `
+      <div class="flex items-start">
+        <i class="fas ${
+          type === 'error' ? 'fa-exclamation-circle text-red-400' :
+          type === 'info' ? 'fa-info-circle text-blue-400' :
+          type === 'warning' ? 'fa-exclamation-triangle text-yellow-400' : 'fa-bell text-gray-300'
+        } text-lg mt-0.5 mr-3"></i>
+        <div class="notification-content text-sm flex-1">${message}</div>
+        <button class="close-notification text-gray-400 hover:text-white ml-2">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    `;
+  }
+
+  // Add to notifications container
+  const container = document.getElementById('notificationsContainer');
+  const notificationsTab = document.getElementById('notifications-tab');
+  
+  // Create a dedicated container for system notifications if it doesn't exist
+  let notificationsTop = document.getElementById('notificationsTop');
+  if (!notificationsTop) {
+    notificationsTop = document.createElement('div');
+    notificationsTop.id = 'notificationsTop';
+    notificationsTop.className = 'w-full space-y-2 mb-4';
+    notificationsTab.insertBefore(notificationsTop, container.parentNode); 
+  }
+  
+  // Add the notification to the top container
+  notificationsTop.insertBefore(notification, notificationsTop.firstChild);
+
+  // Add close button functionality
+  const closeBtn = notification.querySelector('.close-notification');
+  closeBtn.addEventListener('click', () => {
+    notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+    setTimeout(() => notification.remove(), 300);
+  });
+
+  // Auto-remove after duration
+  const timeoutId = setTimeout(() => {
+    notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.remove();
+      }
+    }, 300);
+  }, duration);
+
+  // Clear timeout on hover
+  notification.addEventListener('mouseenter', () => {
+    clearTimeout(timeoutId);
+  });
+
+  // Restart timeout on mouse leave
+  notification.addEventListener('mouseleave', () => {
+    setTimeout(() => {
+      notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.remove();
+        }
+      }, 300);
+    }, 1000);
+  });
+}
+
+// Helper function to get auth headers
+function getAuthHeaders() {
+  return {
+    'Content-Type': 'application/json'
+  };
+}
+
+async function getErrorMessage(resp) {
+  try {
+    const data = await resp.json();
+    return data.error || data.message || (`Error ${resp.status}`);
+  } catch {
+    const t = await resp.text();
+    const s = t && t.trim() ? t.trim() : (`Error ${resp.status}`);
+    return s.length > 240 ? s.slice(0, 240) + '…' : s;
+  }
+}
+
+// Make functions available globally
+window.testNotification = testNotification;
+window.deleteNotification = deleteNotification;
+
+// Load notifications when page loads
+// Toggle DM textarea when DM checkbox is clicked
+document.getElementById('welcomeDMEnabled').addEventListener('change', function() {
+  const dmTextarea = document.getElementById('welcomeDMMessage');
+  dmTextarea.disabled = !this.checked;
+  if (!this.checked) {
+    dmTextarea.value = '';
+  } else {
+    dmTextarea.value = 'Thanks for joining {server}! Enjoy your stay!';
+  }
+});
+
+// Insert variable into message
+function insertVariable(textareaId, variable) {
+  const textarea = document.getElementById(textareaId);
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const text = textarea.value;
+  const before = text.substring(0, start);
+  const after = text.substring(end, text.length);
+  
+  textarea.value = before + variable + after;
+  textarea.focus();
+  textarea.selectionStart = textarea.selectionEnd = start + variable.length;
+}
+
+// Preview welcome message
+function previewWelcomeMessage() {
+  const message = document.getElementById('welcomeMessage').value
+    .replace(/{user}/g, '<span class="text-blue-400">@TestUser</span>')
+    .replace(/{server}/g, '<span class="text-purple-400">' + '<%= guild.name %>' + '</span>')
+    .replace(/{memberCount}/g, '<span class="text-green-400">' + '<%= guild.memberCount || 1000 %>' + '</span>');
+  
+  document.getElementById('previewContent').innerHTML = message;
+  document.getElementById('previewModal').classList.remove('hidden');
+}
+
+// Save welcome settings
+async function saveWelcomeSettings() {
+  const settings = {
+    welcome: {
+      enabled: document.getElementById('welcomeEnabled').checked,
+      channel: document.getElementById('welcomeChannel').value,
+      message: document.getElementById('welcomeMessage').value,
+      dmEnabled: document.getElementById('welcomeDMEnabled').checked,
+      dmMessage: document.getElementById('welcomeDMMessage').value
+    },
+  };
+
+  try {
+    const response = await fetch(`/api/guilds/<%= guild.id %>/welcome`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      body: JSON.stringify(settings),
+      credentials: 'include'
+    });
+
+    if (response.ok) {
+      showNotification('success', 'Welcome settings saved successfully!');
+    } else {
+      const error = await response.json();
+      showNotification('error', error.message || 'Failed to save settings');
+    }
+  } catch (error) {
+    console.error('Error saving welcome settings:', error);
+    showNotification('error', 'Failed to save settings. Please try again.');
+  }
+}
+
+// Load welcome settings
+async function loadWelcomeSettings() {
+  try {
+    const response = await fetch(`/api/guilds/<%= guild.id %>/welcome`, {
+      credentials: 'include',
+      headers: getAuthHeaders()
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      
+      // Welcome settings
+      if (data.welcome) {
+        document.getElementById('welcomeEnabled').checked = data.welcome.enabled || false;
+        document.getElementById('welcomeMessage').value = data.welcome.message || 'Welcome {user} to {server}! 🎉';
+        document.getElementById('welcomeDMEnabled').checked = data.welcome.dmEnabled || false;
+        document.getElementById('welcomeDMMessage').disabled = !data.welcome.dmEnabled;
+        document.getElementById('welcomeDMMessage').value = data.welcome.dmMessage || 'Thanks for joining {server}! Enjoy your stay!';
+      }
+      
+      // Load channels after settings to properly select the saved channels
+      await loadChannelsForWelcome();
+    }
+  } catch (error) {
+    console.error('Error loading welcome settings:', error);
+  }
+}
+
+async function loadChannelsForWelcome() {
+  const welcomeSelect = document.getElementById('welcomeChannel');
+  
+  // Show loading state
+  welcomeSelect.disabled = true;
+  welcomeSelect.innerHTML = '<option value="">Loading channels...</option>';
+
+  try {
+    console.log('Starting to load channels...');
+    const guildId = '<%= guild.id %>';
+    console.log('Using guild ID:', guildId);
+
+    // Log auth headers
+    const headers = getAuthHeaders();
+    console.log('Auth headers:', headers);
+
+    // Make the API request
+    const response = await fetch(`/api/guilds/${guildId}/channels`, {
+      credentials: 'include',
+      headers: headers
+    });
+
+    console.log('Response status:', response.status, response.statusText);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error response:', errorText);
+      throw new Error(`Failed to load channels: ${response.status} ${response.statusText}`);
+    }
+
+    const channels = await response.json();
+    console.log('Received channels:', channels);
+
+    // Clear existing options
+    welcomeSelect.innerHTML = '<option value="">Select a channel</option>';
+
+    if (channels && channels.length > 0) {
+      console.log(`Found ${channels.length} channels`);
+      
+      channels.forEach(channel => {
+        if (channel.type === 0) { // Text channels only
+          console.log('Adding channel:', channel.name, channel.id);
+          const welcomeOption = new Option(`#${channel.name}`, channel.id);
+          welcomeSelect.add(welcomeOption);
+        }
+      });
+
+      // Load saved settings after populating channels
+      try {
+        console.log('Loading saved welcome settings...');
+        const settingsResponse = await fetch(`/api/guilds/${guildId}/welcome`, {
+          credentials: 'include',
+          headers: getAuthHeaders()
+        });
+
+        if (settingsResponse.ok) {
+          const settings = await settingsResponse.json();
+          console.log('Loaded welcome settings:', settings);
+          
+          if (settings.welcome?.channel) {
+            console.log('Setting welcome channel to:', settings.welcome.channel);
+            welcomeSelect.value = settings.welcome.channel;
+          }
+          
+        }
+      } catch (settingsError) {
+        console.error('Error loading welcome settings:', settingsError);
+      }
+    } else {
+      console.warn('No channels found or empty response');
+      welcomeSelect.innerHTML = '<option value="">No text channels available</option>';
+    }
+  } catch (error) {
+    console.error('Error in loadChannelsForWelcome:', error);
+    welcomeSelect.innerHTML = '<option value="">Error loading channels</option>';
+    showNotification('error', 'Failed to load channels. Please check console for details.');
+  } finally {
+    welcomeSelect.disabled = false;
+  }
+}
+
+let __channelsCache = null;
+let __channelsCacheTs = 0;
+const __CHANNELS_TTL_MS = 30000;
+
+async function loadChannelsForDropdowns(dropdownIds, loadingText = 'Loading channels...') {
+  try {
+    console.log('Starting to load channels...');
+    const guildId = '<%= guild.id %>';
+    console.log('Using guild ID:', guildId);
+
+    // Log auth headers
+    const headers = getAuthHeaders();
+    console.log('Auth headers:', headers);
+
+    // Make the API request
+    let channels;
+    const now = Date.now();
+    if (__channelsCache && (now - __channelsCacheTs) < __CHANNELS_TTL_MS) {
+      channels = __channelsCache;
+      console.log('Using cached channels');
+    } else {
+      const response = await fetch(`/api/guilds/${guildId}/channels`, {
+        credentials: 'include',
+        headers: headers
+      });
+
+      console.log('Response status:', response.status, response.statusText);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        throw new Error(`Failed to load channels: ${response.status} ${response.statusText}`);
+      }
+
+      channels = await response.json();
+      __channelsCache = channels;
+      __channelsCacheTs = now;
+    }
+    console.log('Received channels:', channels);
+
+    // Update each dropdown
+    dropdownIds.forEach(dropdownId => {
+      const select = document.getElementById(dropdownId);
+      if (select) {
+        // Clear existing options
+        select.innerHTML = '<option value="">Select a channel</option>';
+
+        if (channels && channels.length > 0) {
+          console.log(`Found ${channels.length} channels for ${dropdownId}`);
+          
+          channels.forEach(channel => {
+            if (channel.type === 0) { // Text channels only
+              console.log('Adding channel:', channel.name, channel.id);
+              const option = new Option(`#${channel.name}`, channel.id);
+              select.add(option);
+            }
+          });
+        } else {
+          console.warn('No channels found or empty response');
+          select.innerHTML = '<option value="">No text channels available</option>';
+        }
+      }
+    });
+
+    return channels;
+  } catch (error) {
+    console.error('Error in loadChannelsForDropdowns:', error);
+    dropdownIds.forEach(dropdownId => {
+      const select = document.getElementById(dropdownId);
+      if (select) {
+        select.innerHTML = '<option value="">Error loading channels</option>';
+      }
+    });
+    showNotification('error', 'Failed to load channels. Please check console for details.');
+    throw error;
+  }
+}
+
+// Logging Functions
+async function loadLoggingSettings() {
+  try {
+    console.log('Loading logging settings...');
+    const guildId = '<%= guild.id %>';
+    
+    const response = await fetch(`/api/guilds/${guildId}/logs`, {
+      credentials: 'include',
+      headers: getAuthHeaders()
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error loading logging settings:', errorText);
+      throw new Error(`Failed to load logging settings: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('Loaded logging settings:', data);
+
+    if (data.success && data.logs) {
+      // Update all log channel dropdowns and toggles
+      updateLogChannel('all', data.logs.all);
+      updateLogChannel('message', data.logs.message);
+      updateLogChannel('member', data.logs.member);
+      updateLogChannel('guild', data.logs.guild);
+      updateLogChannel('voice', data.logs.voice);
+      updateLogChannel('channel', data.logs.channel);
+      updateLogChannel('role', data.logs.role);
+    }
+  } catch (error) {
+    console.error('Error in loadLoggingSettings:', error);
+    showNotification('error', 'Failed to load logging settings. Please check console for details.');
+  }
+}
+
+async function saveLoggingSettings() {
+  try {
+    console.log('Saving logging settings...');
+    const guildId = '<%= guild.id %>';
+    
+    // Collect all log settings
+    const logSettings = {
+      all: document.getElementById('allLogsChannel').value || '',
+      message: document.getElementById('messageLogsChannel').value || '',
+      member: document.getElementById('memberLogsChannel').value || '',
+      guild: document.getElementById('guildLogsChannel').value || '',
+      voice: document.getElementById('voiceLogsChannel').value || '',
+      channel: document.getElementById('channelLogsChannel')?.value || '',
+      role: document.getElementById('roleLogsChannel')?.value || ''
+    };
+
+    console.log('Saving log settings:', logSettings);
+
+    // Save each log type individually
+    const savePromises = [];
+    
+    for (const [logType, channelId] of Object.entries(logSettings)) {
+      if (channelId) {
+        savePromises.push(
+          fetch(`/api/guilds/${guildId}/logs`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              ...getAuthHeaders(),
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ logType, channelId })
+          })
+        );
+      }
+    }
+
+    const results = await Promise.all(savePromises);
+    
+    // Check if all saves were successful
+    const allSuccessful = results.every(response => response.ok);
+    
+    if (allSuccessful) {
+      showNotification('success', 'Logging settings saved successfully!');
+      console.log('All logging settings saved successfully');
+    } else {
+      showNotification('error', 'Some logging settings failed to save. Please check console.');
+      console.error('Some logging settings failed to save');
+    }
+  } catch (error) {
+    console.error('Error in saveLoggingSettings:', error);
+    showNotification('error', 'Failed to save logging settings. Please check console for details.');
+  }
+}
+
+let __rolesCache = null;
+let __rolesCacheTs = 0;
+const __ROLES_TTL_MS = 30000;
+let __categoriesCache = null;
+let __categoriesCacheTs = 0;
+const __CATEGORIES_TTL_MS = 30000;
+
+async function loadRolesForDropdown(selectIds) {
+  const guildId = '<%= guild.id %>';
+  try {
+    let roles;
+    const now = Date.now();
+    if (__rolesCache && (now - __rolesCacheTs) < __ROLES_TTL_MS) {
+      roles = __rolesCache;
+    } else {
+      const resp = await fetch(`/api/guilds/${guildId}/roles`, { credentials: 'include', headers: getAuthHeaders() });
+      if (!resp.ok) throw new Error(await getErrorMessage(resp));
+      roles = await resp.json();
+      __rolesCache = roles;
+      __rolesCacheTs = now;
+    }
+    selectIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = '<option value="">Select a role</option>';
+      roles.forEach(r => {
+        const opt = new Option(`@${r.name}`, r.id);
+        el.add(opt);
+      });
+    });
+    return roles;
+  } catch (e) {
+    selectIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '<option value="">Error loading roles</option>';
+    });
+    showNotification('error', 'Failed to load roles');
+    throw e;
+  }
+}
+
+async function loadCategoriesForDropdown(selectIds) {
+  const guildId = '<%= guild.id %>';
+  try {
+    let cats;
+    const now = Date.now();
+    if (__categoriesCache && (now - __categoriesCacheTs) < __CATEGORIES_TTL_MS) {
+      cats = __categoriesCache;
+    } else {
+      const resp = await fetch(`/api/guilds/${guildId}/categories`, { credentials: 'include', headers: getAuthHeaders() });
+      if (!resp.ok) throw new Error(await getErrorMessage(resp));
+      cats = await resp.json();
+      __categoriesCache = cats;
+      __categoriesCacheTs = now;
+    }
+    selectIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = '<option value="">Select a category</option>';
+      cats.forEach(c => {
+        const opt = new Option(c.name, c.id);
+        el.add(opt);
+      });
+    });
+    return cats;
+  } catch (e) {
+    selectIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '<option value="">Error loading categories</option>';
+    });
+    showNotification('error', 'Failed to load categories');
+    throw e;
+  }
+}
+
+function renderCategoryRow(index, existing) {
+  const container = document.getElementById('ticketCategoriesContainer');
+  const row = document.createElement('div');
+  row.className = 'grid grid-cols-1 md:grid-cols-4 gap-3';
+  row.dataset.index = String(index);
+  row.innerHTML = `
+    <input id="ticketCatEmoji${index}" class="bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg p-2.5" placeholder="Emoji" value="${existing?.emoji || ''}">
+    <input id="ticketCatName${index}" class="bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg p-2.5" placeholder="Name" value="${existing?.name || ''}">
+    <input id="ticketCatDesc${index}" class="bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg p-2.5" placeholder="Description" value="${existing?.description || ''}">
+    <select id="ticketCatCategory${index}" class="bg-gray-700/50 border border-gray-600 text-white text-sm rounded-lg p-2.5">
+      <option value="">Select a category</option>
+    </select>
+  `;
+  container.appendChild(row);
+  return row;
+}
+
+async function initTickets() {
+  const guildId = '<%= guild.id %>';
+  try {
+    await loadChannelsForDropdowns(['ticketPanelChannel', 'ticketTranscriptsChannel']);
+    await loadRolesForDropdown(['ticketHandlersRole', 'ticketEveryoneRole']);
+    const resp = await fetch(`/api/guilds/${guildId}/tickets/setup`, { credentials: 'include', headers: getAuthHeaders() });
+    if (!resp.ok) throw new Error(await getErrorMessage(resp));
+    const setup = await resp.json();
+
+    document.getElementById('ticketPanelChannel').value = setup.Channel || '';
+    document.getElementById('ticketTranscriptsChannel').value = setup.Transcripts || '';
+    document.getElementById('ticketHandlersRole').value = setup.Handlers || '';
+    document.getElementById('ticketEveryoneRole').value = setup.Everyone || '';
+    document.getElementById('ticketDescription').value = setup.Description || '';
+
+    const existingCats = Array.isArray(setup.Categories) ? setup.Categories : [];
+    const max = Math.max(existingCats.length, 1);
+    const rows = [];
+    for (let i = 0; i < max; i++) {
+      rows.push(renderCategoryRow(i + 1, existingCats[i]));
+    }
+    await loadCategoriesForDropdown(rows.map((_, i) => `ticketCatCategory${i + 1}`));
+    existingCats.forEach((c, i) => {
+      const sel = document.getElementById(`ticketCatCategory${i + 1}`);
+      if (sel) sel.value = c.ticketCategory || '';
+    });
+
+    const addBtn = document.getElementById('addTicketCategoryBtn');
+    addBtn.onclick = async () => {
+      const next = document.querySelectorAll('#ticketCategoriesContainer > div').length + 1;
+      const row = renderCategoryRow(next);
+      await loadCategoriesForDropdown([`ticketCatCategory${next}`]);
+    };
+
+    const saveBtn = document.getElementById('saveTicketSettingsBtn');
+    saveBtn.onclick = async () => {
+      const payload = {
+        Channel: document.getElementById('ticketPanelChannel').value || '',
+        Transcripts: document.getElementById('ticketTranscriptsChannel').value || '',
+        Handlers: document.getElementById('ticketHandlersRole').value || '',
+        Everyone: document.getElementById('ticketEveryoneRole').value || '',
+        Description: document.getElementById('ticketDescription').value || '',
+        Categories: Array.from(document.querySelectorAll('#ticketCategoriesContainer > div')).map((row, idx) => {
+          const i = idx + 1;
+          return {
+            emoji: document.getElementById(`ticketCatEmoji${i}`).value || '',
+            name: document.getElementById(`ticketCatName${i}`).value || '',
+            value: (document.getElementById(`ticketCatName${i}`).value || '').toLowerCase().replace(/\s+/g, '-'),
+            description: document.getElementById(`ticketCatDesc${i}`).value || '',
+            ticketCategory: document.getElementById(`ticketCatCategory${i}`).value || ''
+          };
+        }).filter(c => c.name && c.ticketCategory)
+      };
+      try {
+        const saveResp = await fetch(`/api/guilds/${guildId}/tickets/setup`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: getAuthHeaders(),
+          body: JSON.stringify(payload)
+        });
+        if (!saveResp.ok) throw new Error(await getErrorMessage(saveResp));
+        showNotification('success', 'Ticket settings saved');
+      } catch (err) {
+        showNotification('error', err.message || 'Failed to save ticket settings');
+      }
+    };
+
+    const sendBtn = document.getElementById('sendTicketPanelBtn');
+    sendBtn.onclick = async () => {
+      try {
+        const resp = await fetch(`/api/guilds/${guildId}/tickets/panel/send`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: getAuthHeaders()
+        });
+        if (!resp.ok) throw new Error(await getErrorMessage(resp));
+        const data = await resp.json();
+        showNotification('success', `Ticket panel sent to <#${data.channelId}>`);
+      } catch (err) {
+        showNotification('error', err.message || 'Failed to send ticket panel');
+      }
+    };
+  } catch (e) {
+    showNotification('error', e.message || 'Failed to load ticket settings');
+  }
+}
+
+async function loadChannelsForLogging() {
+  try {
+    console.log('Loading channels for logging...');
+    
+    // Get all logging channel dropdowns
+    const channelSelects = [
+      'allLogsChannel',
+      'messageLogsChannel',
+      'memberLogsChannel',
+      'guildLogsChannel',
+      'voiceLogsChannel',
+      'channelLogsChannel',
+      'roleLogsChannel'
+    ];
+
+    // Load channels using the universal function
+    await loadChannelsForDropdowns(channelSelects);
+    
+    // Load saved settings after populating channels
+    await loadLoggingSettings();
+    
+  } catch (error) {
+    console.error('Error in loadChannelsForLogging:', error);
+    showNotification('error', 'Failed to load channels for logging. Please check console for details.');
+  }
+}
+
+function updateLogChannel(logType, channelId) {
+  const channelIdMap = {
+    'all': 'allLogsChannel',
+    'message': 'messageLogsChannel',
+    'member': 'memberLogsChannel',
+    'guild': 'guildLogsChannel',
+    'voice': 'voiceLogsChannel',
+    'channel': 'channelLogsChannel',
+    'role': 'roleLogsChannel'
+  };
+
+  const enabledMap = {
+    'all': 'allLogsEnabled',
+    'message': 'messageLogsEnabled',
+    'member': 'memberLogsEnabled',
+    'guild': 'guildLogsEnabled',
+    'voice': 'voiceLogsEnabled',
+    'channel': 'channelLogsEnabled',
+    'role': 'roleLogsEnabled'
+  };
+
+  const channelSelect = document.getElementById(channelIdMap[logType]);
+  const enabledToggle = document.getElementById(enabledMap[logType]);
+  
+  if (channelSelect) {
+    channelSelect.value = channelId || '';
+  }
+  
+  if (enabledToggle) {
+    enabledToggle.checked = !!channelId;
+  }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  loadNotifications();
+  loadWelcomeSettings();
+  
+  // Load welcome settings when welcome tab is clicked
+  document.querySelector('a[data-tab="welcome"]').addEventListener('click', loadWelcomeSettings);
+  
+  // Load logging settings when logging tab is clicked
+  document.querySelector('a[data-tab="logging"]').addEventListener('click', () => {
+    loadChannelsForLogging();
+  });
+  
+  document.querySelector('a[data-tab="moderation"]').addEventListener('click', () => {
+    initModLogs();
+  });
+  document.querySelector('a[data-tab="automod"]').addEventListener('click', () => {
+    initAutomod();
+  });
+  
+  // Add save button listener for logging
+  const saveLoggingBtn = document.getElementById('saveLoggingSettings');
+  if (saveLoggingBtn) {
+    saveLoggingBtn.addEventListener('click', saveLoggingSettings);
+  }
+  
+  // Add toggle listeners for logging
+  const loggingToggles = [
+    'allLogsEnabled',
+    'messageLogsEnabled',
+    'memberLogsEnabled',
+    'guildLogsEnabled',
+    'voiceLogsEnabled',
+    'channelLogsEnabled',
+    'roleLogsEnabled'
+  ];
+  
+  loggingToggles.forEach(toggleId => {
+    const toggle = document.getElementById(toggleId);
+    if (toggle) {
+      toggle.addEventListener('change', (e) => {
+        const logType = toggleId.replace('Enabled', '');
+        const channelSelect = document.getElementById(`${logType}LogsChannel`);
+        if (channelSelect) {
+          if (e.target.checked) {
+            channelSelect.disabled = false;
+            channelSelect.focus();
+          } else {
+            channelSelect.value = '';
+            channelSelect.disabled = true;
+          }
+        }
+      });
+    }
+  });
+});
+
+let modLogsPage = 0;
+let modLogsPageSize = 10;
+let modLogsType = 'all';
+let modLogsHasMore = false;
+
+async function loadModLogs() {
+  try {
+    const params = new URLSearchParams({
+      type: modLogsType,
+      limit: modLogsPageSize,
+      offset: modLogsPage * modLogsPageSize
+    });
+    const response = await fetch(`/api/guilds/<%= guild.id %>/modlogs?` + params.toString(), {
+      credentials: 'include',
+      headers: getAuthHeaders()
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Failed to load moderation logs');
+    }
+    const data = await response.json();
+    renderModLogs(data.actions || []);
+    modLogsHasMore = (data.actions || []).length === modLogsPageSize;
+    document.getElementById('modLogsPrev').disabled = modLogsPage === 0;
+    document.getElementById('modLogsNext').disabled = !modLogsHasMore;
+    const start = modLogsPage * modLogsPageSize + 1;
+    const end = modLogsPage * modLogsPageSize + (data.actions || []).length;
+    document.getElementById('modLogsStart').textContent = (data.actions || []).length ? start : 0;
+    document.getElementById('modLogsEnd').textContent = end;
+    document.getElementById('modLogsTotal').textContent = (data.actions || []).length;
+  } catch (error) {
+    const table = document.getElementById('modLogsTable');
+    table.innerHTML = `<tr><td colspan="5" class="px-4 py-4 text-center text-sm text-red-400">` + (error.message || 'Failed to load moderation logs') + `</td></tr>`;
+  }
+}
+
+function renderModLogs(actions) {
+  const table = document.getElementById('modLogsTable');
+  if (!actions.length) {
+    table.innerHTML = `<tr><td colspan="5" class="px-4 py-4 text-center text-sm text-gray-400">No moderation actions found</td></tr>`;
+    return;
+  }
+  table.innerHTML = actions.map(a => {
+    const dateStr = typeof a.date === 'number' ? new Date(a.date).toLocaleString() : a.date;
+    return `
+      <tr>
+        <td class="px-4 py-3 text-sm text-white truncate">${a.userTag || a.userId || 'Unknown'}</td>
+        <td class="px-4 py-3 text-sm text-gray-300 capitalize">${a.type}</td>
+        <td class="px-4 py-3 text-sm text-white truncate">${a.moderatorTag || a.moderatorId || 'Unknown'}</td>
+        <td class="px-4 py-3 text-sm text-gray-300 truncate">${a.reason || ''}</td>
+        <td class="px-4 py-3 text-sm text-gray-400">${dateStr}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function initModLogs() {
+  const filter = document.getElementById('modLogsFilter');
+  const prev = document.getElementById('modLogsPrev');
+  const next = document.getElementById('modLogsNext');
+  const exportBtn = document.getElementById('exportModLogs');
+  if (filter) {
+    filter.addEventListener('change', () => {
+      modLogsType = filter.value;
+      modLogsPage = 0;
+      loadModLogs();
+    });
+  }
+  if (prev) {
+    prev.addEventListener('click', () => {
+      if (modLogsPage > 0) {
+        modLogsPage -= 1;
+        loadModLogs();
+      }
+    });
+  }
+  if (next) {
+    next.addEventListener('click', () => {
+      if (modLogsHasMore) {
+        modLogsPage += 1;
+        loadModLogs();
+      }
+    });
+  }
+  if (exportBtn) {
+    exportBtn.addEventListener('click', async () => {
+      const params = new URLSearchParams({
+        type: modLogsType,
+        limit: modLogsPageSize,
+        offset: modLogsPage * modLogsPageSize
+      });
+      const response = await fetch(`/api/guilds/<%= guild.id %>/modlogs?` + params.toString(), {
+        credentials: 'include',
+        headers: getAuthHeaders()
+      });
+      const data = await response.json();
+      const rows = [['User', 'Action', 'Moderator', 'Reason', 'Date']].concat((data.actions || []).map(a => {
+        const dateStr = typeof a.date === 'number' ? new Date(a.date).toLocaleString() : a.date;
+        return [a.userTag || a.userId || '', a.type, a.moderatorTag || a.moderatorId || '', a.reason || '', dateStr];
+      }));
+      const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'moderation_logs.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+  loadModLogs();
+}
+async function initAutomod() {
+  try {
+    const res = await fetch(`/api/guilds/<%= guild.id %>/automod`, { credentials: 'include', headers: getAuthHeaders() });
+    if (!res.ok) throw new Error(await getErrorMessage(res));
+    const data = await res.json();
+    const flagged = document.getElementById('automodFlaggedWords');
+    const spam = document.getElementById('automodSpamMessages');
+    const anti = document.getElementById('automodAntiLink');
+    const mentionLimit = document.getElementById('automodMentionLimit');
+    const mentionStatus = document.getElementById('automodMentionStatus');
+    const keywordStatus = document.getElementById('automodKeywordStatus');
+    flagged.checked = !!data.flaggedWords;
+    spam.checked = !!data.spamMessages;
+    anti.checked = !!data.antiLink;
+    mentionLimit.value = data.mentionSpam.limit || '';
+    mentionStatus.textContent = data.mentionSpam.enabled ? `Enabled (limit: ${data.mentionSpam.limit})` : 'Disabled';
+    keywordStatus.textContent = data.keyword.enabled ? `Enabled (${data.keyword.words.join(', ')})` : 'Disabled';
+    flagged.onchange = async () => {
+      const resp = await fetch(`/api/guilds/<%= guild.id %>/automod/${flagged.checked ? 'enable' : 'disable'}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+        body: JSON.stringify({ type: 'flagged-words' })
+      });
+      if (!resp.ok) showNotification('error', await getErrorMessage(resp)); else showNotification('success', `Flagged words ${flagged.checked ? 'enabled' : 'disabled'}`);
+      await initAutomod();
+    };
+    spam.onchange = async () => {
+      const resp = await fetch(`/api/guilds/<%= guild.id %>/automod/${spam.checked ? 'enable' : 'disable'}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+        body: JSON.stringify({ type: 'spam-messages' })
+      });
+      if (!resp.ok) showNotification('error', await getErrorMessage(resp)); else showNotification('success', `Spam messages ${spam.checked ? 'enabled' : 'disabled'}`);
+      await initAutomod();
+    };
+    anti.onchange = async () => {
+      const resp = await fetch(`/api/guilds/<%= guild.id %>/automod/${anti.checked ? 'enable' : 'disable'}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+        body: JSON.stringify({ type: 'anti-link' })
+      });
+      if (!resp.ok) showNotification('error', await getErrorMessage(resp)); else showNotification('success', `Anti-link ${anti.checked ? 'enabled' : 'disabled'}`);
+      await initAutomod();
+    };
+    const mentionEnable = document.getElementById('automodMentionEnable');
+    const mentionDisable = document.getElementById('automodMentionDisable');
+    mentionEnable.onclick = async () => {
+      const limit = Number(mentionLimit.value);
+      if (!limit || limit < 2) return showNotification('error', 'Enter a valid mention limit (≥2)');
+      const resp = await fetch(`/api/guilds/<%= guild.id %>/automod/enable`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+        body: JSON.stringify({ type: 'mention-spam', number: limit })
+      });
+      if (!resp.ok) showNotification('error', await getErrorMessage(resp)); else showNotification('success', 'Mention spam enabled');
+      await initAutomod();
+    };
+    mentionDisable.onclick = async () => {
+      const resp = await fetch(`/api/guilds/<%= guild.id %>/automod/disable`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+        body: JSON.stringify({ type: 'mention-spam' })
+      });
+      if (!resp.ok) showNotification('error', await getErrorMessage(resp)); else showNotification('success', 'Mention spam disabled');
+      await initAutomod();
+    };
+    const keywordEnable = document.getElementById('automodKeywordEnable');
+    const keywordDisable = document.getElementById('automodKeywordDisable');
+    const keywordInput = document.getElementById('automodKeywordInput');
+    keywordEnable.onclick = async () => {
+      const word = keywordInput.value.trim();
+      if (!word) return showNotification('error', 'Enter a keyword');
+      const resp = await fetch(`/api/guilds/<%= guild.id %>/automod/enable`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+        body: JSON.stringify({ type: 'keyword', word })
+      });
+      if (!resp.ok) showNotification('error', await getErrorMessage(resp)); else showNotification('success', `Keyword '${word}' blocked`);
+      await initAutomod();
+    };
+    keywordDisable.onclick = async () => {
+      const resp = await fetch(`/api/guilds/<%= guild.id %>/automod/disable`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+        body: JSON.stringify({ type: 'keyword' })
+      });
+      if (!resp.ok) showNotification('error', await getErrorMessage(resp)); else showNotification('success', 'Keyword block disabled');
+      await initAutomod();
+    };
+  } catch (e) {
+    showNotification('error', 'Failed to load automod settings');
+  }
+}
+</script>
+
+<style>
+.sidebar-tab.active-tab {
+  background-color: #323132;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.tab-content.hidden {
+  display: none;
+}
+
+/* Notification styles */
+.notification {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.notification.success {
+  border-left: 4px solid #10B981;
+}
+
+.notification.error {
+  border-left: 4px solid #EF4444;
+}
+
+.notification.warning {
+  border-left: 4px solid #F59E0B;
+}
+
+.notification.info {
+  border-left: 4px solid #3B82F6;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.page-shell {
+  background: radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.08), transparent 30%),
+    radial-gradient(circle at 80% 0%, rgba(239, 68, 68, 0.08), transparent 25%),
+    #0b0b12;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+</style>
